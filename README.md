@@ -15,49 +15,49 @@ Algorithm:
 1.a.3. display "Song successfully registered"\
 
 &emsp;&emsp;1.b) For creating a playlist:\
-1.b.1. ask for playlist name\
-1.b.2. display registered songs\
-1.b.3. ask user to choose which songs to include\
-1.b.4. store playlist name and song list\
-1.b.5. display "Playlist succesfully registered"\
+&emsp;&emsp;1.b.1. ask for playlist name\
+&emsp;&emsp;1.b.2. display registered songs\
+&emsp;&emsp;1.b.3. ask user to choose which songs to include\
+&emsp;&emsp;1.b.4. store playlist name and song list\
+&emsp;&emsp;1.b.5. display "Playlist succesfully registered"\
   
-1.c) For editing a playlist:\
-1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
-1.c.1.a) For adding a song:\
-1.c.1.a.1. display registered songs\
-1.c.1.a.2. ask user which songs to add\
-1.c.1.a.3. add songs to the end of the playlist data file\
-1.c.1.a.4. display "Succesfully added songs"\
-1.c.1.b) For deleting a song:\
-1.c.1.b.1. display registered songs\
-1.c.1.b.2. ask user which songs to delete\
-1.c.1.b.3. look for songs in the playlist data file\
-1.c.1.b.3. remove songs from the playlist data file\
-1.c.1.b.4. display "Succesfully deleted songs"\
-1.c.1.c) For editing song order:\
-1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
-1.c.1.c.1.a) For manual changes:\
-1.c.1.c.1.a.1. display songs in the playlist\
-1.c.1.c.1.a.2. ask user to choose a song\
-1.c.1.c.1.a.3. ask user to choose a different song to change positions with\
-1.c.1.c.1.a.4. change positions in playlist data file and save\
-1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue\
-1.c.1.c.1.b) For pre-programmed sorts:\
-1.c.1.c.1.b.1. display pre-programmed sorts\
-1.c.1.c.1.b.2. ask user to choose sort\
-1.c.1.c.1.b.3. apply sort\
-1.c.1.c.1.b.4. save changes in playlist data file\
-1.c.1.d) For deleting a playlist:\
-1.c.1.d.1. ask user for confirmation\
-1.c.1.d.2. delete entry from playlist data file\
+&emsp;&emsp;1.c) For editing a playlist:\
+&emsp;&emsp;1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
+&emsp;&emsp;1.c.1.a) For adding a song:\
+&emsp;&emsp;1.c.1.a.1. display registered songs\
+&emsp;&emsp;1.c.1.a.2. ask user which songs to add\
+&emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
+&emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
+&emsp;&emsp;1.c.1.b) For deleting a song:\
+&emsp;&emsp;1.c.1.b.1. display registered songs\
+&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
+&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
+&emsp;&emsp;1.c.1.b.3. remove songs from the playlist data file\
+&emsp;&emsp;1.c.1.b.4. display "Succesfully deleted songs"\
+&emsp;&emsp;1.c.1.c) For editing song order:\
+&emsp;&emsp;1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
+&emsp;&emsp;1.c.1.c.1.a) For manual changes:\
+&emsp;&emsp;1.c.1.c.1.a.1. display songs in the playlist\
+&emsp;&emsp;1.c.1.c.1.a.2. ask user to choose a song\
+&emsp;&emsp;1.c.1.c.1.a.3. ask user to choose a different song to change positions with\
+&emsp;&emsp;1.c.1.c.1.a.4. change positions in playlist data file and save\
+&emsp;&emsp;1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue\
+&emsp;&emsp;1.c.1.c.1.b) For pre-programmed sorts:\
+&emsp;&emsp;1.c.1.c.1.b.1. display pre-programmed sorts\
+&emsp;&emsp;1.c.1.c.1.b.2. ask user to choose sort\
+&emsp;&emsp;1.c.1.c.1.b.3. apply sort\
+&emsp;&emsp;1.c.1.c.1.b.4. save changes in playlist data file\
+&emsp;&emsp;1.c.1.d) For deleting a playlist:\
+&emsp;&emsp;1.c.1.d.1. ask user for confirmation\
+&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file\
 
-1.d) For playing back playlists\
-1.d.1. ask user for song where to start\
-1.d.2. ask user if they want a) a random order, b) or not\
-1.d.2.a) For a random order\
-1.d.2.a.1. generate a list with numbers from 1 to the number of songs in playlists\
-1.d.2.a.2. follow that order for that playback\
-1.d.2.b) For a not random order\
-1.d.2.a.1. follow the order in the list\
+&emsp;&emsp;1.d) For playing back playlists\
+&emsp;&emsp;1.d.1. ask user for song where to start\
+&emsp;&emsp;1.d.2. ask user if they want a) a random order, b) or not\
+&emsp;&emsp;1.d.2.a) For a random order\
+&emsp;&emsp;1.d.2.a.1. generate a list with numbers from 1 to the number of songs in playlists\
+&emsp;&emsp;1.d.2.a.2. follow that order for that playback\
+&emsp;&emsp;1.d.2.b) For a not random order\
+&emsp;&emsp;1.d.2.a.1. follow the order in the list\
 
 2. 
