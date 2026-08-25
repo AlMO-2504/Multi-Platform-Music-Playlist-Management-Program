@@ -68,6 +68,6 @@ Songs registered will be stored using matrixes, where an element per list of the
 Songs_registered = [[name], [date], [identifiers], [times_played]]
 
 Playlists will also be stored using matrixes where one element is the list of songs included, and the other the order of the songs, both using only numbers.\
-Playlists = [&emsp;[name1, [song_identifiers1],&emsp;[order1]], [name2, [song_identifiers2], [order2]]&emsp;]
+Playlists = [&emsp;[name1, [song_identifiers1], [order1]],&emsp; [name2, [song_identifiers2], [order2]]&emsp;]
 
 The program itself is a loop and for every action described before there will be a corresponding function as to avoid code repetition.
