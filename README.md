@@ -10,45 +10,45 @@ Outputs: new or altered playlist; song registration.
 Algorithm:
 1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.\
 1.a) For registering a song:\
-1.a.1. ask for title, artist, release date, and location.
-1.a.2. add new entry to file that stores every other song and store the information
-1.a.3. display "Song successfully registered"
-1.b) For creating a playlist:
-1.b.1. ask for playlist name
-1.b.2. display registered songs
-1.b.3. ask user to choose which songs to include
-1.b.4. store playlist name and song list
-1.b.5. display "Playlist succesfully registered"
-1.c) For editing a playlist:
-1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist
-1.c.1.a) For adding a song:
-1.c.1.a.1. display registered songs
-1.c.1.a.2. ask user which songs to add
-1.c.1.a.3. add songs to the end of the playlist data file
-1.c.1.a.4. display "Succesfully added songs"
-1.c.1.b) For deleting a song:
-1.c.1.b.1. display registered songs
-1.c.1.b.2. ask user which songs to delete
-1.c.1.b.3. look for songs in the playlist data file
-1.c.1.b.3. remove songs from the playlist data file
-1.c.1.b.4. display "Succesfully deleted songs"
-1.c.1.c) For editing song order:
-1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort
-1.c.1.c.1.a) For manual changes:
-1.c.1.c.1.a.1. display songs in the playlist
-1.c.1.c.1.a.2. ask user to choose a song
-1.c.1.c.1.a.3. ask user to choose a different song to change positions with
-1.c.1.c.1.a.4. change positions in playlist data file and save
-1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue
-1.c.1.c.1.b) For pre-programmed sorts:
-1.c.1.c.1.b.1. display pre-programmed sorts
-1.c.1.c.1.b.2. ask user to choose sort
-1.c.1.c.1.b.3. apply sort
-1.c.1.c.1.b.4. save changes in playlist data file
-1.c.1.d) For deleting a playlist:
-1.c.1.d.1. ask user for confirmation
-1.c.1.d.2. delete entry from playlist data file
-1.d) For playing back playlists
-1.d.1. ask user for song where to start
-1.d.2. ask user if they want a) a random order, b) or not
+1.a.1. ask for title, artist, release date, and location.\
+1.a.2. add new entry to file that stores every other song and store the information\
+1.a.3. display "Song successfully registered"\
+1.b) For creating a playlist:\
+1.b.1. ask for playlist name\
+1.b.2. display registered songs\
+1.b.3. ask user to choose which songs to include\
+1.b.4. store playlist name and song list\
+1.b.5. display "Playlist succesfully registered"\
+1.c) For editing a playlist:\
+1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
+1.c.1.a) For adding a song:\
+1.c.1.a.1. display registered songs\
+1.c.1.a.2. ask user which songs to add\
+1.c.1.a.3. add songs to the end of the playlist data file\
+1.c.1.a.4. display "Succesfully added songs"\
+1.c.1.b) For deleting a song:\
+1.c.1.b.1. display registered songs\
+1.c.1.b.2. ask user which songs to delete\
+1.c.1.b.3. look for songs in the playlist data file\
+1.c.1.b.3. remove songs from the playlist data file\
+1.c.1.b.4. display "Succesfully deleted songs"\
+1.c.1.c) For editing song order:\
+1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
+1.c.1.c.1.a) For manual changes:\
+1.c.1.c.1.a.1. display songs in the playlist\
+1.c.1.c.1.a.2. ask user to choose a song\
+1.c.1.c.1.a.3. ask user to choose a different song to change positions with\
+1.c.1.c.1.a.4. change positions in playlist data file and save\
+1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue\
+1.c.1.c.1.b) For pre-programmed sorts:\
+1.c.1.c.1.b.1. display pre-programmed sorts\
+1.c.1.c.1.b.2. ask user to choose sort\
+1.c.1.c.1.b.3. apply sort\
+1.c.1.c.1.b.4. save changes in playlist data file\
+1.c.1.d) For deleting a playlist:\
+1.c.1.d.1. ask user for confirmation\
+1.c.1.d.2. delete entry from playlist data file\
+1.d) For playing back playlists\
+1.d.1. ask user for song where to start\
+1.d.2. ask user if they want a) a random order, b) or not\
 1.d.2.a) For a random order  
