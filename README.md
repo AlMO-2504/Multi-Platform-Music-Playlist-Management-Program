@@ -10,10 +10,10 @@ Outputs: new or altered playlist; song registration.
 Algorithm:
 1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.\
 
-1.a) For registering a song:\
-1.a.1. ask for title, artist, release date, and location.\
-1.a.2. add new entry to file that stores every other song and store the information\
-1.a.3. display "Song successfully registered"\
+&emsp;1.a) For registering a song:\
+&emsp;&emsp;1.a.1. ask for title, artist, release date, and location.\
+&emsp;&emsp;1.a.2. add new entry to file that stores every other song and store the information\
+&emsp;&emsp;1.a.3. display "Song successfully registered"\
 
 &emsp;&emsp;1.b) For creating a playlist:\
 &emsp;&emsp;&emsp;1.b.1. ask for playlist name\
