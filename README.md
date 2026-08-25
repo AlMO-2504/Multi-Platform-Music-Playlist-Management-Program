@@ -7,7 +7,7 @@ My project for this semester involves creating a program that can create, manage
 __Inputs:__ user instruction (creating playlist, registering song, etc.); song location, title, release date, and artist; songs to delete or to add; new song order.\
 __Outputs:__ new or altered playlist; song registration.
 
-_Algorithm:_
+__Algorithm:__
 1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.\
 
 &emsp;1.a) For registering a song:\
