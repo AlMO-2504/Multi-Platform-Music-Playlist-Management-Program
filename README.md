@@ -15,20 +15,20 @@ Algorithm:
 1.a.3. display "Song successfully registered"\
 
 &emsp;&emsp;1.b) For creating a playlist:\
-&emsp;&emsp;1.b.1. ask for playlist name\
-&emsp;&emsp;1.b.2. display registered songs\
-&emsp;&emsp;1.b.3. ask user to choose which songs to include\
-&emsp;&emsp;1.b.4. store playlist name and song list\
-&emsp;&emsp;1.b.5. display "Playlist succesfully registered"\
+&emsp;&emsp;&emsp;1.b.1. ask for playlist name\
+&emsp;&emsp;&emsp;1.b.2. display registered songs\
+&emsp;&emsp;&emsp;1.b.3. ask user to choose which songs to include\
+&emsp;&emsp;&emsp;1.b.4. store playlist name and song list\
+&emsp;&emsp;&emsp;1.b.5. display "Playlist succesfully registered"\
   
 &emsp;&emsp;1.c) For editing a playlist:\
-&emsp;&emsp;1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
-&emsp;&emsp;1.c.1.a) For adding a song:\
-&emsp;&emsp;1.c.1.a.1. display registered songs\
-&emsp;&emsp;1.c.1.a.2. ask user which songs to add\
-&emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
-&emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
-&emsp;&emsp;1.c.1.b) For deleting a song:\
+&emsp;&emsp;&emsp;1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
+&emsp;&emsp;&emsp;&emsp;1.c.1.a) For adding a song:\
+&emsp;&emsp;&emsp;&emsp;1.c.1.a.1. display registered songs\
+&emsp;&emsp;&emsp;&emsp;1.c.1.a.2. ask user which songs to add\
+&emsp;&emsp;&emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
+&emsp;&emsp;&emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
+&emsp;&emsp;&emsp;&emsp;1.c.1.b) For deleting a song:\
 &emsp;&emsp;&emsp;1.c.1.b.1. display registered songs\
 &emsp;&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
 &emsp;&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
