@@ -29,11 +29,11 @@ Algorithm:
 &emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
 &emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
 &emsp;&emsp;1.c.1.b) For deleting a song:\
-&emsp;&emsp;1.c.1.b.1. display registered songs\
-&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
-&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
-&emsp;&emsp;1.c.1.b.3. remove songs from the playlist data file\
-&emsp;&emsp;1.c.1.b.4. display "Succesfully deleted songs"\
+&emsp;&emsp;&emsp;1.c.1.b.1. display registered songs\
+&emsp;&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
+&emsp;&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
+&emsp;&emsp;&emsp;1.c.1.b.3. remove songs from the playlist data file\
+&emsp;&emsp;&emsp;1.c.1.b.4. display "Succesfully deleted songs"\
 &emsp;&emsp;1.c.1.c) For editing song order:\
 &emsp;&emsp;1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
 &emsp;&emsp;1.c.1.c.1.a) For manual changes:\
