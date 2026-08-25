@@ -1,3 +1,3 @@
 # Multi-Platform-Music-Playlist-Manager
 
-Streaming platforms' promise has been to 
+Streaming platforms' promise has been to offer access to every single piece of media ever created. In the case of the music industry, that would be songs. However, as someone who enjoys listening to both video game music and indie remixes, the songs I like tend to be excluded from official streaming platforms. For example, I have the premium version of Apple Music, but if I were to want to listen to Mario Kart World's, a Nintendo game, soundtrack, I would have to go to either YouTube Music and listen to an unofficial upload that can be taken down at any time, or go to the Nintendo Music app to listen to the songs. 
