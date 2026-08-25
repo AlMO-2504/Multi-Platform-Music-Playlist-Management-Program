@@ -52,12 +52,13 @@ Algorithm:
 &emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file\
 
 &emsp;&emsp;1.d) For playing back playlists\
-&emsp;&emsp;1.d.1. ask user for song where to start\
-&emsp;&emsp;1.d.2. ask user if they want a) a random order, b) or not\
-&emsp;&emsp;1.d.2.a) For a random order\
-&emsp;&emsp;1.d.2.a.1. generate a list with numbers from 1 to the number of songs in playlists\
-&emsp;&emsp;1.d.2.a.2. follow that order for that playback\
-&emsp;&emsp;1.d.2.b) For a not random order\
-&emsp;&emsp;1.d.2.a.1. follow the order in the list\
+&emsp;&emsp;&emsp;1.d.1. ask user for song where to start\
+&emsp;&emsp;&emsp;1.d.2. ask user if they want a) a random order, b) or not\
+&emsp;&emsp;&emsp;&emsp;1.d.2.a) For a random order\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.d.2.a.1. generate a list with numbers from 1 to the number of songs in playlists\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.d.2.a.2. follow that order for that playback\
+&emsp;&emsp;&emsp;&emsp;1.d.2.b) For a not random order\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.d.2.a.1. follow the order in the list\
+&emsp;&emsp;&emsp;1.d.3. add 1 to the number of times the song has been played
 
-2. 
+2. go back to step 1
