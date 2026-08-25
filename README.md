@@ -63,3 +63,5 @@ Algorithm:
 &emsp;&emsp;&emsp;1.d.3. add 1 to the number of times the song has been played
 
 2. go back to step 1
+
+Songs registered will be stored using matrixes, where one element is also the list of all the information of the songs (artist, date, etc.) as strings, a unique numerical identifier, and the number of times the song has been played. Playlists will also be stored using matrixes where one element is the list of songs included, and the other the order of the songs, both using only numbers. The program itself is a loop and for every action described before there will be a corresponding function as to avoid code repetition.
