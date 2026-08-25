@@ -14,7 +14,7 @@ Algorithm:
 1.a.2. add new entry to file that stores every other song and store the information\
 1.a.3. display "Song successfully registered"\
 
-&emsp;1.b) For creating a playlist:\
+&emsp;&ensp;1.b) For creating a playlist:\
 1.b.1. ask for playlist name\
 1.b.2. display registered songs\
 1.b.3. ask user to choose which songs to include\
