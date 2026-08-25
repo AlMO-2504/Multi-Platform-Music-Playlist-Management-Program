@@ -24,32 +24,32 @@ Algorithm:
 &emsp;&emsp;1.c) For editing a playlist:\
 &emsp;&emsp;&emsp;1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
 &emsp;&emsp;&emsp;&emsp;1.c.1.a) For adding a song:\
-&emsp;&emsp;&emsp;&emsp;1.c.1.a.1. display registered songs\
-&emsp;&emsp;&emsp;&emsp;1.c.1.a.2. ask user which songs to add\
-&emsp;&emsp;&emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
-&emsp;&emsp;&emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.1. display registered songs\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.2. ask user which songs to add\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
 &emsp;&emsp;&emsp;&emsp;1.c.1.b) For deleting a song:\
-&emsp;&emsp;&emsp;1.c.1.b.1. display registered songs\
-&emsp;&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
-&emsp;&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
-&emsp;&emsp;&emsp;1.c.1.b.3. remove songs from the playlist data file\
-&emsp;&emsp;&emsp;1.c.1.b.4. display "Succesfully deleted songs"\
-&emsp;&emsp;1.c.1.c) For editing song order:\
-&emsp;&emsp;1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
-&emsp;&emsp;1.c.1.c.1.a) For manual changes:\
-&emsp;&emsp;1.c.1.c.1.a.1. display songs in the playlist\
-&emsp;&emsp;1.c.1.c.1.a.2. ask user to choose a song\
-&emsp;&emsp;1.c.1.c.1.a.3. ask user to choose a different song to change positions with\
-&emsp;&emsp;1.c.1.c.1.a.4. change positions in playlist data file and save\
-&emsp;&emsp;1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue\
-&emsp;&emsp;1.c.1.c.1.b) For pre-programmed sorts:\
-&emsp;&emsp;1.c.1.c.1.b.1. display pre-programmed sorts\
-&emsp;&emsp;1.c.1.c.1.b.2. ask user to choose sort\
-&emsp;&emsp;1.c.1.c.1.b.3. apply sort\
-&emsp;&emsp;1.c.1.c.1.b.4. save changes in playlist data file\
-&emsp;&emsp;1.c.1.d) For deleting a playlist:\
-&emsp;&emsp;1.c.1.d.1. ask user for confirmation\
-&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.1. display registered songs\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.3. remove songs from the playlist data file\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.4. display "Succesfully deleted songs"\
+&emsp;&emsp;&emsp;&emsp;1.c.1.c) For editing song order:\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a) For manual changes:\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.1. display songs in the playlist\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.2. ask user to choose a song\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.3. ask user to choose a different song to change positions with\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.4. change positions in playlist data file and save\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b) For pre-programmed sorts:\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.1. display pre-programmed sorts\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.2. ask user to choose sort\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.3. apply sort\
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.4. save changes in playlist data file\
+&emsp;&emsp;&emsp;&emsp;1.c.1.d) For deleting a playlist:\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.1. ask user for confirmation\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file\
 
 &emsp;&emsp;1.d) For playing back playlists\
 &emsp;&emsp;1.d.1. ask user for song where to start\
