@@ -8,19 +8,19 @@ __Inputs:__ user instruction (creating playlist, registering song, etc.); song l
 __Outputs:__ new or altered playlist; song registration.
 
 __Algorithm:__
-1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.\
+1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.
 
 &emsp;1.a) For registering a song:\
 &emsp;&emsp;1.a.1. ask for title, artist, release date, and location.\
 &emsp;&emsp;1.a.2. add new entry to file that stores every other song and store the information\
-&emsp;&emsp;1.a.3. display "Song successfully registered"\
+&emsp;&emsp;1.a.3. display "Song successfully registered"
 
 &emsp;&emsp;1.b) For creating a playlist:\
 &emsp;&emsp;&emsp;1.b.1. ask for playlist name\
 &emsp;&emsp;&emsp;1.b.2. display registered songs\
 &emsp;&emsp;&emsp;1.b.3. ask user to choose which songs to include\
 &emsp;&emsp;&emsp;1.b.4. store playlist name and song list\
-&emsp;&emsp;&emsp;1.b.5. display "Playlist succesfully registered"\
+&emsp;&emsp;&emsp;1.b.5. display "Playlist succesfully registered"
   
 &emsp;&emsp;1.c) For editing a playlist:\
 &emsp;&emsp;&emsp;1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
@@ -50,7 +50,7 @@ __Algorithm:__
 &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.4. save changes in playlist data file\
 &emsp;&emsp;&emsp;&emsp;1.c.1.d) For deleting a playlist:\
 &emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.1. ask user for confirmation\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file\
+&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file
 
 &emsp;&emsp;1.d) For playing back playlists\
 &emsp;&emsp;&emsp;1.d.1. ask user for song where to start\
