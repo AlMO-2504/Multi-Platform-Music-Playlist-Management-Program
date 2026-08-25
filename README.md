@@ -4,8 +4,8 @@ Streaming platforms' promise has been to offer access to every single piece of m
 
 My project for this semester involves creating a program that can create, manage, and play playlists with songs from streaming services the user is subscribed to and songs they have already downloaded to their device by storing the file address or website, along with other relevant information such as title, artist, and release date. After a playlist has been created, it would allow the user to add and remove songs, change the song order manually or through a pre-programmed sort (alphabetical, by release date, by duration, etc.), and select songs to create a new playlist. It would also keep record of the most listened songs by the user for them to see and to create a Top 10 list.
 
-_Inputs:_ user instruction (creating playlist, registering song, etc.); song location, title, release date, and artist; songs to delete or to add; new song order.
-_Outputs:_ new or altered playlist; song registration.
+__Inputs:__ user instruction (creating playlist, registering song, etc.); song location, title, release date, and artist; songs to delete or to add; new song order.\
+__Outputs:__ new or altered playlist; song registration.
 
 _Algorithm:_
 1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.\
