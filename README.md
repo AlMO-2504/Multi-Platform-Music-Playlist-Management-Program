@@ -64,4 +64,7 @@ __Algorithm:__
 
 2. go back to step 1
 
-Songs registered will be stored using matrixes, where one element is also the list of all the information of the songs (artist, date, etc.) as strings, a unique numerical identifier, and the number of times the song has been played. Playlists will also be stored using matrixes where one element is the list of songs included, and the other the order of the songs, both using only numbers. The program itself is a loop and for every action described before there will be a corresponding function as to avoid code repetition.
+Songs registered will be stored using matrixes, where an element per list of the information of the songs (artist, date, etc.) as strings, of unique numerical identifiers, and the number of times each song has been played.
+Songs_registered = [[name], [date], [identifiers], [times_played]]
+
+Playlists will also be stored using matrixes where one element is the list of songs included, and the other the order of the songs, both using only numbers. The program itself is a loop and for every action described before there will be a corresponding function as to avoid code repetition.
