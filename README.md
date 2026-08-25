@@ -12,7 +12,7 @@ Algorithm:
 1.a) For registering a song:\
 1.a.1. ask for title, artist, release date, and location.\
 1.a.2. add new entry to file that stores every other song and store the information\
-1.a.3. display "Song successfully registered"\
+1.a.3. display "Song successfully registered"\\
 1.b) For creating a playlist:\
 1.b.1. ask for playlist name\
 1.b.2. display registered songs\
