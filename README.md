@@ -12,7 +12,8 @@ Algorithm:
 1.a) For registering a song:\
 1.a.1. ask for title, artist, release date, and location.\
 1.a.2. add new entry to file that stores every other song and store the information\
-1.a.3. display "Song successfully registered"\\
+1.a.3. display "Song successfully registered"\
+
 1.b) For creating a playlist:\
 1.b.1. ask for playlist name\
 1.b.2. display registered songs\
@@ -51,4 +52,9 @@ Algorithm:
 1.d) For playing back playlists\
 1.d.1. ask user for song where to start\
 1.d.2. ask user if they want a) a random order, b) or not\
-1.d.2.a) For a random order  
+1.d.2.a) For a random order\
+1.d.2.a.1. generate a list with numbers from 1 to the number of songs in playlists\
+1.d.2.a.2. follow that order for that playback\
+1.d.2.b) For a not random order\
+1.d.2.a.1. follow the order in the list\
+3. 
