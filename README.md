@@ -6,7 +6,7 @@ My project for this semester involves creating a program that can create, manage
 
 !!!!!!!!!!!!!\
 **IMPORTANT** run the program in vscode or other python interpreters that use windows, not thonny. msvcrt library works differently in thonny and will make the playback not work at all. also, i think the program wouldn't work on linux or macos due to the sys library using different parameters for functions, but i have not been able to check\
-!!!!!!!!!!!!\
+!!!!!!!!!!!!
 
 __Inputs:__ user instruction (creating playlist, registering song, etc.); song location, title, release date, and artist; songs to delete or to add; new song order.\
 __Outputs:__ new or altered playlist; song registration.
