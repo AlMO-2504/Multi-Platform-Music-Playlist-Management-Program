@@ -1,263 +1,569 @@
+import time
+import sys
+import msvcrt
 """
 Playlist manager
 AlMoOl
 
 The following program is a prototype that should be able of registering songs, creating playlists, and playing back playlists
-For now, all these actions are separated and locally stored, so if a playlist was created, it won't appear in playback, nor will registered songs appear for playlist creation
+Currently, the program should work similarly to the final product, i. e., functions work with one another, but data storage is still local and editing playlists and registered songs is not an available option yet
+Data storage:
+Songs info is stored in a matrix, where one element is the song info. For each list of song info, the data is order in the following way:
+1. filepath
+2. length (in seconds)
+3. title
+4. author
+For playlists, playlists are stored in a playlist matrix. Inside a playlist, the playlist name is always the first element; also, songs are not stored themselves, but rather, their position (in list, so position 1 is 0)in the main song list:
+For example: p_list[0] = ["name", 1, 7, 5]
 """
+
+# establishing main matrices
+"""
+for the final delivery, this will be stored inside the computer not the code.
+however, this way of handling the main data works for the prototype.
+furthermore, filepaths are not yet implemented, but a blank element will be left in their place as to facilitate later improvements
+"""
+s_list = [
+    ['', 441, "zen ball master", "glenn powell"],
+    ['', 331, "jezebel", "sade"],
+    ['', 81, "green eggs and jam", "dunkey"],
+    ['', 252, "georgy porgy", "toto"]
+]
+pl_list = [
+    ["dummy", 1, 2, 0, 3]
+]
+
+def valid_input(inp, type):
+    """
+    function to check if the input given corresponds to the required data type
+    input: user input
+    output: true if the input is the requried data type, false if not
+    1. check if there is an input
+    2. try to convert input to data type
+    3. if an error is raised, that means it wasn't the correct data type; return False
+    4. if an error did not happen, return true
+    """
+    if(inp == ''):
+        print("please, type something".upper())
+        return False
+    else:
+        try:
+            inp = type(inp)
+        except ValueError: # checks for the specific type of error produced by converting to an invalid data type ex. int('a')
+            return False
+    return True
+
+def valid_range(value, low_lim, up_lim, option):
+    """
+    Input: value that needs to fall within an established range, upper limit of the range, lower limit of the range, what type of range is it (includes limits or not, interval notation)
+    Output: value is inside that range (true or false)
+    1. if (), verifies that the value is not equal to any limit, and not greater than upper limit nor lower than lower limit
+    2. if [], verifies that the value is not greater than upper limit nor lower than lower limit
+    3. if (], verifies that the value is not equal or greater than upper limit nor lower than lower limit
+    4. if (], verifies that the value is not equal or greater than upper limit nor lower than lower limit
+    """
+    match option:
+        case '()':
+            if(value >= up_lim or value <= low_lim):
+                return False
+        case '[]':
+            if(value > up_lim or value < low_lim):
+                return False
+        case '(]':
+            if(value > up_lim or value <= low_lim):
+                return False
+        case '[)':
+            if(value >= up_lim or value < low_lim):
+                return False
+    return True
+
 
 # main menu display
 def action_menu():
     """
-Function for displaying and selecting an option from main action menu
-in: action
-out: action options, error message if option isn't valid
-1. display actions
-2. ask user for action
-3. check if action is valid
-4. if not, display error message and return to step 1. If yes, continue to step 5
-5. store action
+    Function for displaying and selecting an option from main action menu
+    input: user(action)
+    output: user(action options), system(formatted user action input)
+    1. display actions
+    2. ask for input
+    3. return input
     """
-    valid_action = False # establish that the input(which has not been given yet) is not valid
-    while (valid_action == False):
-        print("1. register song") # display menu actions
-        print("2. create playlist")
-        print("3. edit playlist")
-        print("4. playback playlists")
-        action = int(input("Choose an option: ")) # ask user to choose option
-        if(action <= 0 or action > 4): # check if option is not valid, is not in range of action options
-            print("Please, choose a valid option.\n") # send error message
-        else:
-            valid_action = True
-            return action # store chosen action
+    print("1. register song") # display menu actions
+    print("2. create playlist")
+    print("3. edit playlist")
+    print("4. playback playlists")
+    print("[e]. Type e to exit")
+    action = str(input("Choose an option: ")) # convert to string
+    action = action.lower() # convert to lowercase to reduce the number of options available
+    final_action = '' # temporary variable to store characters from action, does not include spaces
+    for char in action:
+        if(char != ' '): # if it is not a space, the character is added
+            final_action += char
+    return str(final_action) # this is done to avoid '2 ' not entering the '2' option
         
 # Register song
+def get_min_sec():
+    """
+    function to receive a valid min:sec input [00:00]
+    input: user(min:sec)
+    output: user(error message if it applies), system[total seconds from input (3:15 -> 195 s)]
+    1. ask for string input
+    2. if the character is not a digit, print not a valid input
+    3. while ':' has not been reached, min * 10 and add the digit
+    4. after ':' is reached, sec * 10 and add the digit
+    5. if ':' was never encountered, print not a valid format
+    6. if seconds >= 60, then print seconds can't be greater than 60
+    """
+    while(True):
+        dur = str(input("duration [min:sec]: ")) # duration in 00:00
+        min_sec = 'min' # working with minutes, currently
+        valid = True
+        min = 0
+        sec = 0
+        d = 0
+        for char in dur:
+            if(char == ':'): # changes from working with minutes to working with seconds
+                min_sec = 'sec'
+            else:
+                if(valid_input(char, int) == False): # checks if char is a digit
+                    print("type in format 00:00 using positive digits".upper())
+                    valid = False
+                    break
+                d = int(char) # converts input to digit
+                match min_sec:
+                    case 'min':
+                        min = min * 10
+                        min += d
+                    case 'sec':
+                        sec = sec * 10
+                        sec += d
+        if(sec >= 60):
+            print("seconds can't be greater than or equal to 60".upper())
+        elif(valid == False):
+            continue # checks if a wrong answer was given, not a digit; avoids accidentally breaking the loop, valid is reset at the start of the loop
+        elif(min_sec == 'min'):
+            print("please, give length in adequate format".upper())
+        else:
+            break # if no errors were made by the user, the loop is broken
+    dur = 60 * min + sec # transforms minutes to seconds and adds them to the remaining seconds
+    return dur # returns the duration in seconds
+
 def register_menu():
     """
-Function for registering songs
-in: song name, artist name, song location
-out: successful registration message
-1. ask for name
-2. ask for artist
-3. ask for location
-4. store song info
-5. print success message
+    Function for registering songs
+    input: user(song name, artist name, song duration)
+    output: user(successful registration message), system(new entry in song matrix)
+    1. ask for title
+    2. ask for artist
+    3. ask for duration using min_sec()
+    4. store song info in temporrary list
+    5. store temporary list in playlist matrix
+    5. print success message
     """
-    name = str(input("song name: "))
+    print("\nsong registration".upper())
+    title = str(input("song title: "))
     artist = str(input("artist name: "))
-    directory = str(input("song location: "))
-    song = [name, artist, directory]
-    print(f"Registering song: {name} by {artist} in {directory}")
-    print("Successful registration")
+    duration = get_min_sec()
+    directory = ' '
+    song = [directory, duration, title, artist]
+    s_list.append(song)
+    print(f"Registering song: {title} by {artist}")
+    return
 
 #Playlist creation
-"""
-songs are stored under the following format: name, artist, in_playlist (true or false), this is only for this section
-"""
-def disp_avlbl_songs(song_matrix): # function to display songs availaible/currently registered
+def disp_avlbl_songs(song_matrix, pl):
+    """"
+    function to display currently registered songs and if the songs have been added to the playlist
+    input: none from user, system(song list, and playlist to be evaluated if songs are in there)
+    output: user(song list)
+    1. check what songs are already in playlist
+    2. if song is already in playlist, print {song info} (already in playlist)
+    3. else, print {song info}
     """
-function for displaying songs registered in a main matrix
-in: song matrix
-out: display of song list
-1. start a counter, i
-2. go through the list of songs
-3. for every song, print {i}. {song name}, {song artist}
-4. check if song is in playlist
-5. add (already in playlist) if true
-6. add 1 to i every time the cycle is repeated
-    """
-    print("\n") # adds a line to distinguish this info from everything else
-    i = 1 # count variable
-    for song_info in song_matrix: # goes through every song info stored in matrix
-        if (song_info[2] == False): # checks if song is not in playlist, which is stored in the third element of the song list
-            print(f"{i}. {song_info[0]}, {song_info[1]}") # song are stored as [song name (pos = 0), song artist (pos = 1)]
-        else:
-            print(f"{i}. {song_info[0]}, {song_info[1]} (song already in playlist)") # adds extra message
-        i = i + 1
+    print("\n")
+    songs_pl = [] # songs in playlist list
+    for i in range(1, len(pl)): # starts at 1, because playlist name is stored in pos = 0
+        if(songs_pl.count(pl[i]) == 0): # checks if pl[i] appears in songs_pl
+            songs_pl.append(pl[i]) # if not, it adds it to the playlist; this avoid repeat positions
+    songs_pl.sort() # sorts the list in ascending order
+    j = 0 # second count variable
+    already = False # if song is already in playlist
+    out_range = False # if the count variable has already reached the end of the songs in playlist list
+    for i in range(len(song_matrix)):
+        if(len(songs_pl) > 0): # if there are songs in playlist
+            if(j >= len(songs_pl)): # checks the count variable does not exceed the list size
+                j = len(songs_pl) - 1 # return variable to a safe state
+                out_range = True
+                already = False
+            elif(songs_pl[j] == i and out_range == False): # checks if the pos stored in songs_pl corresponds to the current position (i)
+                already = True
+                j += 1 # moves j to the next element of songs_pl
+            else:
+                already = False
+        print(f"{i+1}. {song_matrix[i][2]} by {song_matrix[i][3]} {already * '(song already in playlist)'}")
+    return
 
-def validate_song(song, song_mtx_size):
+def pl_creation():
     """
-function for validating song if song is in list range
-in: song position, song matrix size
-out: valid song position
-1. convert natural language position to list position
-2. check if song is within range of list
-3. if not, send error message and return False
-4. if yes, return True
+    function for creating and storing a playlist
+    input: user(playlist name, songs in playlist)
+    output: none to the user, system(new playlist)
+    1. ask for playlist name
+    2. display available songs
+    3. ask for what song to add
+    4. ask if user wants to add another song
+    5. if yes, return to step 2
+    6. if not, store new pl in pl matrix
     """
-    song = song - 1 # since options start at 1 and list order starts at 0
-    if(song < 0 or song >= song_mtx_size):
-        print("Choose a valid option\n")
-        return False
-    else:
-        return True
-
-def create_pl_menu():
-    """
-main function for creating playlists section
-in: playlist name, songs in playlist
-out: new playlist
-1. ask for playlist (pl) name
-2. disp registered songs
-3. ask user to choose a song to include in playlist
-4. change state of song to already in playlist in song matrix
-5. ask user if they want to continue choosing songs
-6. if yes, repeat from step 2
-7. if not, display final info of the playlist (songs and order)
-    """
-    print("\nPlaylist creation: ")
-    #assuming the following registered songs
-    songs = [["zen ball master", "john powell", False], ["jezebel", "sade", False], ["green eggs and jam", "dunkey", False], ["georgy porgy", "toto", False]]
-    songs_chosen = [] # empty vector for song positions
+    print("\nplaylist creation".upper())
     pl_name = str(input("playlist name: "))
-    pl_done = False # assume user is not done choosing songs
-    while(pl_done == False):
-        disp_avlbl_songs(songs) # call display songs function
-        valid_song = False # assume chosen song is not a valid option (not in range of list)
-        while(valid_song == False):
-            chosen = int(input(f"Type the number of the song you'd like to add to {pl_name}: ")) # ask for song position in displayed list
-            valid_song = validate_song(chosen, len(songs)) # call validating function, loop will stop once a valid option is received
-        songs_chosen.append(chosen - 1) # adds the list position (natural language - 1) to the songs_chosen list
-        songs[chosen - 1][2] = True # changes inclusion state of song in main song matrix
-        valid_done = False # asume user doesn't give a valid response to being done 
-        while(valid_done == False):
-            done = str(input("Would you like to continue adding songs? [Y/N]: "))
-            if(done.upper() == 'Y'): # transforms to capital letters to avoid case sensitivity
-                valid_done = True # the answer is valid (Y or N)
-                pl_done = False # user is not done yet, they want to continue
-            elif(done.upper() == 'N'):
-                valid_done = True # the answer is valid (Y or N)
-                pl_done = True # user is done, they don't want to continue
-        if(pl_done == True): # if user is done, print final info of the playlist
-            print(f"\n{pl_name}:") # prints playlist title in a new line to avoid messy shell
-            i = 1 # uses a count variable to order displayed list
-            for ch in songs_chosen: # ch is the position of the song chosen in the main song matrix
-                print(f"{i}. {songs[ch][0]}, by {songs[ch][1]}")
-                i = i + 1
+    new_pl = [pl_name]
+    song_added = False # if user has given a valid song to add
+    cont = True # continue, if the user wants to continue
+    value_error = False # if there has been a value error
+    range_error = False # if there has been a range error
+    c_error = False # if the continue input is not a valid or there has been an error with it
+    while (cont == True):
+        while (song_added == False):
+            disp_avlbl_songs(s_list, new_pl)
+            if(value_error == True):
+                print("please, type a number".upper())
+                value_error = False
+            elif(range_error == True):
+                print("please, choose one number from the given list".upper())
+                range_error =  False
+            s = input(f"type the number of the song to add to {new_pl[0]}: ") # 0 stores pl name
+            if(valid_input(s, int) == True):
+                s = int(s)
+                range_error = not valid_range(s, 1, len(s_list), '[]') # valid_range return False if there has been an error and true otherwise, inverting the valuable helps readability
+                if(range_error == False):
+                    new_pl.append(s-1) # s is given in natural numbers, positions start at 0
+                    song_added = True
+            else:
+                value_error = True
+        if(c_error == True):
+            print("Type either Y or N".upper())
+            c_error = False
+        c = str(input("Would you like to add another song [Y/N]? ")) # continue value
+        match c.upper():
+            case 'Y':
+                cont = True
+                song_added = False
+            case 'N':
+                cont = False
+            case _:
+                c_error = True
+    pl_list.append(new_pl)
+    return
                 
 def edit_pl_menu():
     print("not available yet")
+    return
 
-def playback_menu():
+def disp_pl(pl):
     """
-function for playing songs in playlists
-in: playlist, starting song, music command
-out: song being currently played
-1. display playlists
-2. ask for playlist they want to listen to
-3. display songs in playlist
-4. ask for song where to start
-5. display currently playing song
-6. ask user if they want to skip, go back to previous song, or stop
-7. if they want to stop, stop the loop
-8. if they want to skip, move over to the next position in the playlist
-9. if they want to go back to previous song, move back to the previous position in the playlist
+    function to display playlist (songs in playlist)
+    input: system(playlist position in playlist matrix)
+    output: user(playlist)
+    1. print every element in the playlist
+    2. that's it
     """
-    # assume the following songs
-    songs = [["zen ball master", "john powell"], ["jezebel", "sade"], ["green eggs and jam", "dunkey"], ["georgy porgy", "toto"]]
-    # assume the following playlists
-    pl1 = ["Playlist 1", 0, 1, 3] # the numbers are the positions of the song inside the songs matrix
-    pl2 = ["Playlist 2", 2, 1, 1]
-    pl3 = ["Playlist 3", 3, 2, 1, 0]
-    pl_total = [pl1, pl2, pl3]
-    i = 1
-    for playlist in pl_total: # display every playlist with an ordered number
-        print(f"{i}. {playlist[0]}")
-        i = i + 1
-    valid_playlist = False
-    while(valid_playlist == False):
-        pl = int(input("Choose a playlist: ")) # ask user for playlist
-        valid_playlist = validate_song(pl, len(pl_total)) # call validate_song function with the number of elements in pl_total as the range
-    i = 1
-    for s in range(1, len(pl_total[pl - 1])): # create a vector that goes from 1 to the end of pl_total[pl] so it skips the first position, the first position stores the name of the pl
-        #pl_total[pl-1] is the playlist info, -1 because it is stored using natural language, it starts from 1, not 0, as lists do
-        song_info = pl_total[pl - 1][s] # it collects the position of each song stored inside the playlist matrix
-        print(f"{i}. {songs[song_info][0]}, {songs[song_info][1]}") # as stated before, song info is stored as [name, artist]
-        i = i + 1
-    valid_song = False
-    while(valid_song == False):
-        s = int(input("Choose song to start on: "))
-        if(s <= 0 or s >= len(pl_total[pl-1])): # validate_song is not aplicable because of <=, s cannot be zero because that's where the name is stored
-            valid_song = False
-            print("Not a valid option")
+    print("\n")
+    for i in range(1, len(pl_list[pl])):
+        s_pos = pl_list[pl][i] # song position
+        print(f"{i}. {s_list[s_pos][2]} - {s_list[s_pos][3]}") #from song list -> s_list[s_pos] is the list of the info associated with that song
+    return
+
+def disp_pl_list():
+    """
+    function to display every playlist available
+    input: none
+    output: user(playlist name and order)
+    1. go to pl_list (main playlist matrix)
+    2. print the name of every playlist
+    """
+    print("\nPlaylists")
+    for i in range(len(pl_list)):
+        print(f"{i+1}. {pl_list[i][0]}") 
+    return
+
+def playback_selection():
+    """
+    function for choosing which playlist and which song from said playlist to start playback from
+    input: user(playlist, and song to start from)
+    output: system(playlist, and song to start from)
+    1. display playlists
+    2. ask for playlist to user
+    3. check if answer is coherent, if not return to 2
+    4. display songs in chosen playlist
+    5. ask for song where to start from from user
+    6. return pl and song values
+    """
+    print("\nplayback".upper())
+    disp_pl_list()
+    while True:
+        pl = input("Which playlist: ")
+        v_inp = valid_input(pl, int)
+        if(v_inp == False):
+            print("type the number of the playlist".upper())
         else:
-            valid_song = True
-    play = True # start play condition
-    while(play == True):
-        current_song = pl_total[pl - 1][s] # collect song position from playlist list
-        print(f"Now playing {songs[current_song][0]} by {songs[current_song][1]}") # use song position to collect info from song matrix 
-        print("[S] for stop, [N] for next, [P] for previous: ") # display possible commands
-        action = str(input()) # ask for command
-        if(action.upper() == 'S'): # upper of input to avoid case sensitivity
-            play = False # break loop condition
-        elif(action.upper() == 'N'): 
-            s = s + 1 # add 1 to go to the next position in playlist list
-            if(s == len(pl_total[pl - 1])):
-                s = 1 # resets s to one to avoid list errors, and because the first position is stored in 1, zero is reserved for pl name
-        elif(action.upper() == 'P'):
-            s = s - 1 # substracts 1 to fo to the previous position in playlist list
-            if(s == 0):
-                s = len(pl_total[pl - 1]) - 1 # once again, since zero is reserved for name, it goes all the way back to the end of the playlist
+            pl = int(pl)
+            v_range = valid_range(pl, 1, len(pl_list), '[]')
+            if(v_range == False):
+                print("select a number from the given list".upper())
+            else:
+                break
+    pl = pl - 1 # answers are given in natural numbers, positions start at 0
+    disp_pl(pl)
+    while True:
+        song = input("Which song to start from: ")
+        v_inp = valid_input(song, int)
+        if(v_inp == False):
+            print("type the number of the song".upper())
         else:
-            print("not a command")
+            song = int(song)
+            v_range = valid_range(song, 1, len(pl_list[pl]), '[)')
+            if(v_range == False):
+                print("select a number from the given list".upper())
+            else:
+                break
+    return song, pl
+
+def playback(s_length):
+    """
+    playback function (this is not the playback menu, it is the function that plays back the current song)
+    input: user(command, next, previous or exit), system(song length in seconds)
+    output: user(percentage of completion, instructions)
+    1. start timer
+    2. check if time since timer started is greater or equal to s_lenght
+    3. if true, exit
+    4. if not, print commands
+    5. update the percentage every x seconds (check p variable below)
+    6. check if user has given any commands
+    7. if yes, return what option the user has chosen
+    8. if not, continue
+    """
+    speed = 10 # how fast the songs are going, 10 = 10x speed
+    p = 2 # how (p)recise the updating should be, it expresses a power of 10^-p, for example, 2 means every 0.01 the percentage will update, but also the time precision of calculations. A lower p means greater precision and more updates per second
+    start_time = round(time.monotonic(), p) * speed # time.monotonic gives back time in seconds; it is then rounded to the established precision and multiplied by the speed
+    past_time = round(time.monotonic(), p) * speed - start_time # the last time recorded, it is relative to start_time so it start at 0 from start time
+    error_time_s = 0 # start time for error message (invalid input), after time, the message disappears
+    error_time_c = 0 # how much time has passed since start time: error_time_(c)urrent
+    error_bool = False # if an invalid input has been given by the user
+    command = '' # user input
+    msg = "Option: " # the msg given to the user to ask for input
+    sys.stdout.write(f"0.0%\nType [e] for exit, [n] for next, [p] for previous.\n{msg}") # prints three lines, one for percentage, one for command list, and one for user input
+    while True:
+        current_time = round(time.monotonic(), p) * speed - start_time # records how many time has passed since the timer started
+        if(current_time >= s_length): # if the time is greater to the duration of the songs, return with [N]ext command
+            return 'N'
+        else:
+            if(error_bool == True): 
+                error_time_c = round(time.monotonic(), p) * speed - error_time_s # counts how many time has passed since an invalid input was given
+            if(error_time_c > 10): # if 10 seconds have passed, resets error conditions and deletes message
+                error_bool = False
+                error_time_s = 0
+                error_time_c = 0
+                sys.stdout.write(f"\033[B\r\033[K\033[1A\r\033[{len(msg)}C")
+                """
+                to explain stdout.write, consider the following
+                {
+                0.0%
+                Type [e] for exit, [n] for next, [p] for previous.
+                Option: [Cursor is here]
+                Error message
+                }
+                \033[B moves cursor down a line
+                \r moves cursor to the start of the line
+                \033[K wipes the line from the current cursor position, hence \r
+                \033[1A moves the cursor up one line
+                \r moves the cursor to the start of the line
+                \033[{len(msg)}C moves cursor to the right, after "Option: " that is why msg is stored as a string, to calculate its length and move to the right length units
+                this returns cursor to the original position 
+                """
+            if(round(current_time - past_time, p) > 10**(-p)): # if the difference in time between the last time recorded and the current time recorded is greater than the unit established by (p)recision
+                # the conditional makes it so every 10**(-p) units the percentage is updated. monotonic gives time with microsecond precision, if every time the time changed the percentage was updated, there would be a lot of uneeded updates
+                past_time = current_time # resets past_time
+                pg = round(past_time/s_length * 100, 1) # calculates the percentage of the song with a decimal of precition
+                sys.stdout.write(f"\033[2A\r\033[K{pg}%\033[2B\r\033[{len(msg)}C")
+                """
+                consider the following
+                {
+                0.0%
+                Type [e] for exit, [n] for next, [p] for previous.
+                Option: [Cursor is here]
+                Error message
+                }
+                \033[A moves cursor up two lines
+                \r moves cursor to the start of the line
+                \033[K wipes the line
+                {
+                [Cursor is here]
+                Type [e] for exit, [n] for next, [p] for previous.
+                Option:
+                Error message
+                }
+                sys prints the percentage, then
+                \033[2B moves the cursor down two lines
+                \r moves the cursor to the start of the line
+                \033[{len(msg)}C moves cursor to the right, after "Option: "
+                this returns cursor to the original position 
+                """
+                sys.stdout.flush() # it updates the changes made by stdout.write() if they had not been written yet
+            if(msvcrt.kbhit()): # checks if the user has hit a key in the keyboard
+                command = msvcrt.getche() # getche gets and repeats the character, the character is stored as bytes
+                command = command.decode(encoding="ascii") # since the character is stored as bytes, it needs to be converted to a string. decode() decodes the bytes using ascii
+                command = command.upper() # converts command string to uppercase to facilitate match
+            match (command):
+                case 'N':
+                    return 'N' # next
+                case '':
+                    continue
+                case 'P':
+                    return 'P' # previous
+                case 'E':
+                    return 'E' # exit
+                case _:
+                    sys.stdout.write(f"\n{command} is NOT AN OPTION\033[1A\r\033[{len(msg)}C\033[K") # writes [KEY] is NOT AN OPTION below the "Option: " line, moves the cursor back up again
+                    sys.stdout.flush()
+                    error_bool = True
+                    error_time_s = round(time.monotonic(), p) * speed # start error timer
+                    command = '' # resets command
+
+def pl_playback(start_s, pl):
+    """
+    function for playing back a playlist
+    input: system(start song, playlist)
+    output: user(song playback)
+    1. print enough space for the terminal to look clean
+    2. print current song
+    3. print next song
+    4. call playback function and store the return value
+    5. if return = N, go to the next song
+    6. if return = P, go to the previous song
+    7. if return = E, exit the playback loop
+    """
+    option = ''
+    i = start_s # count variable 1, for the current song
+    j = i + 1 # count variable 2, for the next song
+    pl = pl_list[pl] # creates a local copy of the playlist (which are song positions)
+    for n in range(6): # prints empty lines to make enough for the following writes
+        print("")
+    while (option != 'E'):
+        sys.stdout.write("\r\033[K\033[A\r\033[K\033[A\r\033[K\033[A\r\033[K\033[A\r\033[K") # clears the past 5 lines
+        sys.stdout.flush() # applies changesz if they had not been applied yet
+        if(i > len(pl) - 1): # checks if i is bigger than list length to avoid range errors
+            i = 1 # return i to the first song position
+        elif(i < 1): # if i is lower than 1, which is the lowest position that stores songs, it moves it back up to the end of the list
+            i = len(pl) - 1
+        if(j > len(pl) - 1): # same for j
+            j = 1
+        elif(j < 1):
+            j = len(pl) - 1
+        title = s_list[pl[i]][2] # looks for title of current song
+        artist = s_list[pl[i]][3] # looks for artist of current song
+        sec = s_list[pl[i]][1] # looks for duration of current song
+        title2 = s_list[pl[j]][2] # looks for title of next song
+        artist2 = s_list[pl[j]][3] # looks for artist of next song
+        min = sec//60 # calculates minutes from the seconds
+        sec = sec - min * 60 # calculates the remaining seconds 
+        print(f"NOW PLAYING {title} BY {artist} - {min}:{sec}") # prints info of current song
+        print(f"Next, {title2} by {artist2}") # prints info of next song
+        option = playback(s_list[pl[i]][1]) #saves the return value of playback()
+        match option:
+            case 'N': # moves to the next song by adding 1 to the count variables
+                i += 1
+                j += 1
+            case 'P': # moves to the previous song by substracting 1 from the count variable
+                i -= 1
+                j -= 1
+    print("\n")
+    return
 
 def main():
-    act = action_menu()
-    if(act == 1):
-        register_menu()
-    elif(act == 2):
-        create_pl_menu()
-    elif(act == 3):
-        edit_pl_menu()
-    else:
-        playback_menu()
+    while True: 
+        act = action_menu()
+        match act:
+            case '1':
+                register_menu()
+            case '2':
+                pl_creation()
+            case '3':
+                edit_pl_menu()
+            case '4':
+                song, pl = playback_selection()
+                pl_playback(song, pl)
+            case 'e':
+                break
+            case _:
+                print("not an option\n".upper())
+        print("\n", end="")
+    return
 main()
-
 """
-test cases:
-1.
-inputs: 1, a, b, c
-expected output: Registering song: a by b in c
-actual output: Registering song: a by b in c
-2.
-input: 67
-expected output: please choose a valid option
-actual output: Please, choose a valid option.
-3.
-inputs: 2, pl, 5, 3, y, 1, y, 1, n
-expected outputs: (Playlist creation), (1. zenball master... 4. georgy porgy, toto), (choose a valid option), (... 3. green eggs and ham, dunkey (already in playlist)), (1. zenball master,
-john powell (already in playlist)), (pl: 1. green eggs and ham, by dunkey 2. zen ball master, by john powell 3. zen ball master, by john powell)
-actual output: "Playlist creation: "; "Choose a valid option"; "3. green eggs and jam, dunkey (song already in playlist)"; "1. zen ball master, john powell (song already in playlist)";
-"pl:
-1. green eggs and jam, by dunkey
-2. zen ball master, by john powell
-3. zen ball master, by john powell"
-
-4.
-inputs: 4, 2, 3, n, n, n, p, p, s
-expected outputs:
-"1. Playlist 1
-2. Playlist 2
-3. Playlist 3";
-"1. green eggs and ham, dunkey
-2. jezebel, sade
-3. jezebel, sade";
-"Now playing jezebel by sade";
-"Now playing green eggs and ham by dunkey";
-"Now playing jezebel by sade";
-"Now playing green eggs and ham by dunkey";
-"Now playing jezebel by sade";
-actual outputs:
-"1. Playlist 1
-2. Playlist 2
-3. Playlist 3";
-"1. green eggs and jam, dunkey
-2. jezebel, sade
-3. jezebel, sade";
-"Now playing jezebel by sade";
-"Now playing green eggs and jam by dunkey";
-"Now playing jezebel by sade";
-"Now playing green eggs and jam by dunkey";
-"Now playing jezebel by sade";
-
+program test case
+1a.-
+    inputs{
+        1
+        adele
+        song
+        1:44
+        2
+        pl
+    }
+    outputs{
+        1. zen ball master by glen powell...
+        5. adele by song
+    }
+1b.- (from 1a, after outputs)
+    inputs{
+        3
+        y
+        4
+        y
+        5
+        y
+        5
+        n
+        4
+    }
+    outputs{
+        1. dummy
+        2. pl
+    }
+1c.- (from 1b outputs):
+    inputs{
+        2
+    }
+    outputs{
+        1. green eggs and jam - dunkey
+        2. georgy porgy - toto
+        3. adele - song
+        4. adele - song
+    }
+1d.- (from 1c outputs)
+    inputs{
+        3
+    }
+    outputs{
+        NOW PLAYING adele BY song - 1:44
+        Next, adele by song
+        0.0%
+        Type [e] for exit, [n] for next, [p] for previous.
+        Option:
+    }
+1d.- (from 1d outputs)
+    inputs{
+        n
+        n
+        n
+        p
+    }
+    outputs{
+        NOW PLAYING green eggs and jam BY dunkey - 1:44
+        Next, georgy porgy by toto
+        0.0%
+        Type [e] for exit, [n] for next, [p] for previous.
+        Option:
+    }
 """
