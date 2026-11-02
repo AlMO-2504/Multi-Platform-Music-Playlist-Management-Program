@@ -14,25 +14,109 @@ Songs info is stored in a matrix, where one element is the song info. For each l
 3. title
 4. author
 For playlists, playlists are stored in a playlist matrix. Inside a playlist, the playlist name is always the first element; also, songs are not stored themselves, but rather, their position (in list, so position 1 is 0)in the main song list:
-For example: p_list[0] = ["name", 1, 7, 5]
-"""
+For example: p_list[0] = ["name", 1, 7, 5], s_list[1] = ["C:...", 331, "virtual insanity", "jamiroquai"]
 
-# establishing main matrices
+in a file, songs and playlists lists have been designed to store their elements in a shared file, each element contained in a single line
+since their elements are lists, each element uses a separator '|' to separate their own elements. As such, they use the following structure:
+    Songs    :
+directory|dur|name|artist
+    Playlists    :
+name|song1|song2|song3|song4|song5|song6|
+a heading is utilized to help the program identify what it is reading. said heading uses a lot of blank spaces since user inputs cannot contain them
 """
-for the final delivery, this will be stored inside the computer not the code.
-however, this way of handling the main data works for the prototype.
-furthermore, filepaths are not yet implemented, but a blank element will be left in their place as to facilitate later improvements
-"""
-s_list = [
-    ['', 441, "zen ball master", "glenn powell"],
-    ['', 331, "jezebel", "sade"],
-    ['', 81, "green eggs and jam", "dunkey"],
-    ['', 252, "georgy porgy", "toto"]
-]
-pl_list = [
-    ["dummy", 1, 2, 0, 3]
-]
+#storing data
+def read_file():
+    """
+    input: no inputs
+    outputs: song and playlist lists from file (system)
+    function to read the file that stores info between sessions
+    1. check if file 'song_data.txt' already exists, if not create the file, song_list and pl_list start with default values
+    2. if it does, read the file
+    3. check under what heading is the info contained (songs or playlists)
+    4. for songs, separate the line string using the '|' separator into a list
+        a. since dur (the second element) represents seconds, transform to int
+        b. delete the \n, the character that the file uses to express a new line, from the last element
+        c. add song data to song list
+    5. for playlists, separate the line string using the '|' separator into a list
+        a. since every element apart from the name is a position, transform the elements from 1 to end of list to ints
+        b. add playlist data to playlist list
+    6. return song and playlist lists
+    """
+    try:
+        sd = open('song_data.txt', 'r')
+        data = sd.readlines()
+        s_list = []
+        pl_list = []
+        for d in data:
+            if(d == "    Songs    :\n"):
+                store_songs = True
+                continue
+            elif(d == "    Playlists    :\n"):
+                store_songs = False
+                continue
+            if(store_songs == True):
+                song = d.split("|")
+                song[1] = int(song[1])
+                song[3] = song[3][:-1] #removes \n from the last element
+                s_list.append(song)
+            else:
+                playlist = d.split("|")
+                for i in range(1, len(playlist)):
+                    playlist[i] = int(playlist[i])
+                pl_list.append(playlist)
+        sd.close()
+    except:
+        file = open('song_data.txt', 'w')
+        file.close()
+        s_list = [
+            ['', 441, "zen ball master", "glenn powell"],
+            ['', 331, "jezebel", "sade"],
+            ['', 81, "green eggs and jam", "dunkey"],
+            ['', 252, "georgy porgy", "toto"]
+        ] #default value
+        pl_list = [
+            ["dummy", 1, 2, 0, 3]
+        ] #defalut value
+    return s_list, pl_list
 
+def join_list(list, sep):
+    """
+    function to turn list to string that separates its elements using a character separator
+    input: list and char separator
+    output: list as a string
+    1. for every element, add string of element and separator to the return string
+    2. for the final element, only add the element, the separator is not needed
+    """
+    string = ""
+    for i in range(len(list) - 1):
+        string += str(list[i])
+        string += sep
+    string += str(list[len(list) - 1])
+    return string
+
+def write_file(s_l, p_l):
+    """
+    function to store all the made to the main matrices during the session
+    input: song and playlists lists
+    output: file with new info
+    1. add song heading to file
+    2. for every song, join the song data to a string
+    3. write the song data in the file, adding a \n char to use another line the next time
+    4. add playlist headline to file
+    5. steps 2 and 3, but using playlist data
+    """
+    with open('song_data.txt', 'w') as sd:
+        sd.write("    Songs    :\n")
+        sep = "|"
+        for s in s_l:
+            song_data = join_list(s, sep)
+            sd.write(f"{song_data}\n")
+        sd.write("    Playlists    :\n")
+        for p in p_l:
+            playlist_data = join_list(p, sep)
+            sd.write(f"{playlist_data}\n")
+    return
+#input validation
 def valid_input(inp, type):
     """
     function to check if the input given corresponds to the required data type
@@ -116,7 +200,7 @@ def action_menu():
     """
     print("1. register song") # display menu actions
     print("2. create playlist")
-    print("3. edit playlist")
+    print("3. edit")
     print("4. playback playlists")
     print("[e]. Type e to exit")
     action = cl_strinput("Choose an option: ") # convert to string
@@ -174,7 +258,7 @@ def get_min_sec():
     dur = 60 * min + sec # transforms minutes to seconds and adds them to the remaining seconds
     return dur # returns the duration in seconds
 
-def register_menu():
+def register_menu(s_list):
     """
     Function for registering songs
     input: user(song name, artist name, song duration)
@@ -194,7 +278,7 @@ def register_menu():
     song = [directory, duration, title, artist]
     s_list.append(song)
     print(f"Registering song: {title} by {artist}")
-    return
+    return s_list
 
 #Playlist creation
 def disp_avlbl_songs(song_matrix, pl):
@@ -229,7 +313,7 @@ def disp_avlbl_songs(song_matrix, pl):
         print(f"{i+1}. {song_matrix[i][2]} by {song_matrix[i][3]} {already * '(song already in playlist)'}")
     return
 
-def pl_creation():
+def pl_creation(pl_list, s_list):
     """
     function for creating and storing a playlist
     input: user(playlist name, songs in playlist)
@@ -280,13 +364,13 @@ def pl_creation():
             case _:
                 c_error = True
     pl_list.append(new_pl)
-    return
+    return pl_list
                 
 def edit_pl_menu():
     print("not available yet")
     return
 
-def disp_pl(pl):
+def disp_pl(pl, s_list, pl_list):
     """
     function to display playlist (songs in playlist)
     input: system(playlist position in playlist matrix)
@@ -300,7 +384,7 @@ def disp_pl(pl):
         print(f"{i}. {s_list[s_pos][2]} - {s_list[s_pos][3]}") #from song list -> s_list[s_pos] is the list of the info associated with that song
     return
 
-def disp_pl_list():
+def disp_pl_list(pl_list):
     """
     function to display every playlist available
     input: none
@@ -313,7 +397,7 @@ def disp_pl_list():
         print(f"{i+1}. {pl_list[i][0]}") 
     return
 
-def playback_selection():
+def playback_selection(pl_list, s_list):
     """
     function for choosing which playlist and which song from said playlist to start playback from
     input: user(playlist, and song to start from)
@@ -326,7 +410,7 @@ def playback_selection():
     6. return pl and song values
     """
     print("\nplayback".upper())
-    disp_pl_list()
+    disp_pl_list(pl_list)
     while True:
         pl = cl_strinput("Which playlist: ")
         v_inp = valid_input(pl, int)
@@ -340,7 +424,7 @@ def playback_selection():
             else:
                 break
     pl = pl - 1 # answers are given in natural numbers, positions start at 0
-    disp_pl(pl)
+    disp_pl(pl, s_list, pl_list)
     while True:
         song = cl_strinput("Which song to start from: ")
         v_inp = valid_input(song, int)
@@ -456,7 +540,7 @@ def playback(s_length):
                     error_time_s = round(time.monotonic(), p) * speed # start error timer
                     command = '' # resets command
 
-def pl_playback(start_s, pl):
+def pl_playback(start_s, pl, pl_list, s_list):
     """
     function for playing back a playlist
     input: system(start song, playlist)
@@ -507,23 +591,25 @@ def pl_playback(start_s, pl):
     return
 
 def main():
-    while True: 
+    songs, playlists = read_file()
+    while True:
         act = action_menu()
         match act:
             case '1':
-                register_menu()
+                songs = register_menu(songs)
             case '2':
-                pl_creation()
+                playlists = pl_creation(playlists, songs)
             case '3':
                 edit_pl_menu()
             case '4':
-                song, pl = playback_selection()
-                pl_playback(song, pl)
+                song, pl = playback_selection(playlists, songs)
+                pl_playback(song, pl, playlists, songs)
             case 'e':
                 break
             case _:
                 print("not an option\n".upper())
         print("\n", end="")
+    write_file(songs, playlists)
     return
 main()
 """
