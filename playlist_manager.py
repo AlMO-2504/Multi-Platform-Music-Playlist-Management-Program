@@ -77,6 +77,32 @@ def valid_range(value, low_lim, up_lim, option):
                 return False
     return True
 
+def cl_strinput(msg):
+    """
+    function to remove unnecessary blank spaces (at start, end, and more than one)
+    input: input message, a string is asked for inside the function
+    output: string with no spaces at the start and end, and no consecutive spaces
+    1. ask for string input
+    2. for each character of the input, check if the last character was a space, if so, don't add the character.
+    3. remove spaces from start and end
+    4. return clear string
+    """
+    inp = input(msg)
+    cl_str = inp[0]
+    for i in range(1, len(inp)):
+        if(cl_str[-1] == " " and inp[i] == " "):
+            continue
+        else:
+            cl_str += inp[i]
+    if(cl_str[0] == " "):
+        if(cl_str[-1] == " "):
+            return cl_str[1:-1]
+        else:
+            return cl_str[1:]
+    elif(cl_str[-1] == " "):
+        return cl_str[0:-1]
+    else:
+        return cl_str
 
 # main menu display
 def action_menu():
@@ -93,7 +119,7 @@ def action_menu():
     print("3. edit playlist")
     print("4. playback playlists")
     print("[e]. Type e to exit")
-    action = str(input("Choose an option: ")) # convert to string
+    action = cl_strinput("Choose an option: ") # convert to string
     action = action.lower() # convert to lowercase to reduce the number of options available
     final_action = '' # temporary variable to store characters from action, does not include spaces
     for char in action:
@@ -115,7 +141,7 @@ def get_min_sec():
     6. if seconds >= 60, then print seconds can't be greater than 60
     """
     while(True):
-        dur = str(input("duration [min:sec]: ")) # duration in 00:00
+        dur = cl_strinput("duration [min:sec]: ") # duration in 00:00
         min_sec = 'min' # working with minutes, currently
         valid = True
         min = 0
@@ -161,8 +187,8 @@ def register_menu():
     5. print success message
     """
     print("\nsong registration".upper())
-    title = str(input("song title: "))
-    artist = str(input("artist name: "))
+    title = cl_strinput("song title: ")
+    artist = cl_strinput("artist name: ")
     duration = get_min_sec()
     directory = ' '
     song = [directory, duration, title, artist]
@@ -216,7 +242,7 @@ def pl_creation():
     6. if not, store new pl in pl matrix
     """
     print("\nplaylist creation".upper())
-    pl_name = str(input("playlist name: "))
+    pl_name = cl_strinput("playlist name: ")
     new_pl = [pl_name]
     song_added = False # if user has given a valid song to add
     cont = True # continue, if the user wants to continue
@@ -232,7 +258,7 @@ def pl_creation():
             elif(range_error == True):
                 print("please, choose one number from the given list".upper())
                 range_error =  False
-            s = input(f"type the number of the song to add to {new_pl[0]}: ") # 0 stores pl name
+            s = cl_strinput(f"type the number of the song to add to {new_pl[0]}: ") # 0 stores pl name
             if(valid_input(s, int) == True):
                 s = int(s)
                 range_error = not valid_range(s, 1, len(s_list), '[]') # valid_range return False if there has been an error and true otherwise, inverting the valuable helps readability
@@ -244,7 +270,7 @@ def pl_creation():
         if(c_error == True):
             print("Type either Y or N".upper())
             c_error = False
-        c = str(input("Would you like to add another song [Y/N]? ")) # continue value
+        c = cl_strinput("Would you like to add another song [Y/N]? ") # continue value
         match c.upper():
             case 'Y':
                 cont = True
@@ -302,7 +328,7 @@ def playback_selection():
     print("\nplayback".upper())
     disp_pl_list()
     while True:
-        pl = input("Which playlist: ")
+        pl = cl_strinput("Which playlist: ")
         v_inp = valid_input(pl, int)
         if(v_inp == False):
             print("type the number of the playlist".upper())
@@ -316,7 +342,7 @@ def playback_selection():
     pl = pl - 1 # answers are given in natural numbers, positions start at 0
     disp_pl(pl)
     while True:
-        song = input("Which song to start from: ")
+        song = cl_strinput("Which song to start from: ")
         v_inp = valid_input(song, int)
         if(v_inp == False):
             print("type the number of the song".upper())
