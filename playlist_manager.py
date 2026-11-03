@@ -61,6 +61,7 @@ def read_file():
                 s_list.append(song)
             else:
                 playlist = d.split("|")
+                playlist[-1] = playlist[-1][:-1] #removes \n from the last element
                 for i in range(1, len(playlist)):
                     playlist[i] = int(playlist[i])
                 pl_list.append(playlist)
@@ -172,21 +173,24 @@ def cl_strinput(msg):
     4. return clear string
     """
     inp = input(msg)
-    cl_str = inp[0]
-    for i in range(1, len(inp)):
-        if(cl_str[-1] == " " and inp[i] == " "):
-            continue
+    try:
+        cl_str = inp[0]
+        for i in range(1, len(inp)):
+            if(cl_str[-1] == " " and inp[i] == " "):
+                continue
+            else:
+                cl_str += inp[i]
+        if(cl_str[0] == " "):
+            if(cl_str[-1] == " "):
+                return cl_str[1:-1]
+            else:
+                return cl_str[1:]
+        elif(cl_str[-1] == " "):
+            return cl_str[0:-1]
         else:
-            cl_str += inp[i]
-    if(cl_str[0] == " "):
-        if(cl_str[-1] == " "):
-            return cl_str[1:-1]
-        else:
-            return cl_str[1:]
-    elif(cl_str[-1] == " "):
-        return cl_str[0:-1]
-    else:
-        return cl_str
+            return cl_str
+    except:
+        return msg
 
 # main menu display
 def action_menu():
@@ -198,6 +202,7 @@ def action_menu():
     2. ask for input
     3. return input
     """
+    print("main menu".upper())
     print("1. register song") # display menu actions
     print("2. create playlist")
     print("3. edit")
@@ -274,11 +279,11 @@ def register_menu(s_list):
     title = cl_strinput("song title: ")
     artist = cl_strinput("artist name: ")
     duration = get_min_sec()
-    directory = ' '
+    directory = ''
     song = [directory, duration, title, artist]
     s_list.append(song)
     print(f"Registering song: {title} by {artist}")
-    return s_list
+    return
 
 #Playlist creation
 def disp_avlbl_songs(song_matrix, pl):
@@ -313,41 +318,37 @@ def disp_avlbl_songs(song_matrix, pl):
         print(f"{i+1}. {song_matrix[i][2]} by {song_matrix[i][3]} {already * '(song already in playlist)'}")
     return
 
-def pl_creation(pl_list, s_list):
+def add_song(pl, s_list): # requires a playlist in list form, not position form
     """
-    function for creating and storing a playlist
-    input: user(playlist name, songs in playlist)
-    output: none to the user, system(new playlist)
-    1. ask for playlist name
-    2. display available songs
-    3. ask for what song to add
-    4. ask if user wants to add another song
-    5. if yes, return to step 2
-    6. if not, store new pl in pl matrix
+    function to add song to playlist
+    input: playlist to add song to, song list (system), song choice (user)
+    output: valid song choice position (system)
+    1. display avaialable songs
+    2. if song is already in playlist, notify the user
+    3. ask for song position
+    4. check if song choice is in valid range of the song list and is a number
+    5. if so, return song choice
     """
-    print("\nplaylist creation".upper())
-    pl_name = cl_strinput("playlist name: ")
-    new_pl = [pl_name]
     song_added = False # if user has given a valid song to add
     cont = True # continue, if the user wants to continue
-    value_error = False # if there has been a value error
-    range_error = False # if there has been a range error
-    c_error = False # if the continue input is not a valid or there has been an error with it
+    value_error = False
+    range_error = False
+    c_error = False
     while (cont == True):
         while (song_added == False):
-            disp_avlbl_songs(s_list, new_pl)
+            disp_avlbl_songs(s_list, pl)
             if(value_error == True):
                 print("please, type a number".upper())
                 value_error = False
             elif(range_error == True):
                 print("please, choose one number from the given list".upper())
                 range_error =  False
-            s = cl_strinput(f"type the number of the song to add to {new_pl[0]}: ") # 0 stores pl name
+            s = cl_strinput(f"type the number of the song to add to {pl[0]}: ") # 0 stores pl name
             if(valid_input(s, int) == True):
                 s = int(s)
                 range_error = not valid_range(s, 1, len(s_list), '[]') # valid_range return False if there has been an error and true otherwise, inverting the valuable helps readability
                 if(range_error == False):
-                    new_pl.append(s-1) # s is given in natural numbers, positions start at 0
+                    pl.append(s-1) # s is given in natural numbers, positions start at 0
                     song_added = True
             else:
                 value_error = True
@@ -363,11 +364,24 @@ def pl_creation(pl_list, s_list):
                 cont = False
             case _:
                 c_error = True
+
+def pl_creation(pl_list, s_list):
+    """
+    function for creating and storing a playlist
+    input: user(playlist name, songs in playlist)
+    output: none to the user, system(new playlist)
+    1. ask for playlist name
+    2. display available songs
+    3. ask for what song to add
+    4. ask if user wants to add another song
+    5. if yes, return to step 2
+    6. if not, store new pl in pl matrix
+    """
+    print("\nplaylist creation".upper())
+    pl_name = cl_strinput("playlist name: ")
+    new_pl = [pl_name]
+    add_song(new_pl, s_list)
     pl_list.append(new_pl)
-    return pl_list
-                
-def edit_pl_menu():
-    print("not available yet")
     return
 
 def disp_pl(pl, s_list, pl_list):
@@ -397,6 +411,57 @@ def disp_pl_list(pl_list):
         print(f"{i+1}. {pl_list[i][0]}") 
     return
 
+def choose_pl(pl_list):
+    """
+    function to obtain user playlist choice
+    input: playlists list (system), playlist choice (user)
+    output: valid playlist chocie (system)
+    1. show playlists
+    2. ask for playlist choice position
+    3. check if choice is a number
+    4. check if choice is within range
+    5. return choice
+    """
+    disp_pl_list(pl_list)
+    if(len(pl_list) == 0):
+        return None
+    while True:
+        pl = cl_strinput("Which playlist: ")
+        v_inp = valid_input(pl, int)
+        if(v_inp == False):
+            print("type the number of the playlist".upper())
+        else:
+            pl = int(pl)
+            v_range = valid_range(pl, 1, len(pl_list), '[]')
+            if(v_range == False):
+                print("select a number from the given list".upper())
+            else:
+                return pl
+
+def choose_s(pl, s_list, pl_list, msg):
+    """
+    function to choose song from playlist, used for deleting songs and playback song selection
+    input: playlist, song list, playlist list, message for input (system), song choice (user)
+    output: valid song choice (user)
+    1. display songs in playlist
+    2. ask for song position
+    3. check if song choice is within range of the playlist and is a number
+    4. if so, return song choice
+    """
+    disp_pl(pl, s_list, pl_list)
+    while True:
+        song = cl_strinput(msg)
+        v_inp = valid_input(song, int)
+        if(v_inp == False):
+            print("type the number of the song".upper())
+        else:
+            song = int(song)
+            v_range = valid_range(song, 1, len(pl_list[pl]), '[)')
+            if(v_range == False):
+                print("select a number from the given list".upper())
+            else:
+                return song
+            
 def playback_selection(pl_list, s_list):
     """
     function for choosing which playlist and which song from said playlist to start playback from
@@ -410,33 +475,18 @@ def playback_selection(pl_list, s_list):
     6. return pl and song values
     """
     print("\nplayback".upper())
-    disp_pl_list(pl_list)
-    while True:
-        pl = cl_strinput("Which playlist: ")
-        v_inp = valid_input(pl, int)
-        if(v_inp == False):
-            print("type the number of the playlist".upper())
-        else:
-            pl = int(pl)
-            v_range = valid_range(pl, 1, len(pl_list), '[]')
-            if(v_range == False):
-                print("select a number from the given list".upper())
-            else:
-                break
-    pl = pl - 1 # answers are given in natural numbers, positions start at 0
-    disp_pl(pl, s_list, pl_list)
-    while True:
-        song = cl_strinput("Which song to start from: ")
-        v_inp = valid_input(song, int)
-        if(v_inp == False):
-            print("type the number of the song".upper())
-        else:
-            song = int(song)
-            v_range = valid_range(song, 1, len(pl_list[pl]), '[)')
-            if(v_range == False):
-                print("select a number from the given list".upper())
-            else:
-                break
+    if(len(pl_list) > 0):
+        pl = choose_pl(pl_list) - 1 # answers are given in natural numbers, positions start at 0
+    else:
+        print("not enough playlists")
+        input("press enter to continue".upper())
+        return
+    if(len(pl_list[pl]) > 1):
+        song = choose_s(pl, s_list, pl_list, "Which song to start from [type the number]: ")
+    else:
+        print("not enough songs in playlist")
+        input("press enter to continue".upper())
+        return
     return song, pl
 
 def playback(s_length):
@@ -590,20 +640,240 @@ def pl_playback(start_s, pl, pl_list, s_list):
     print("\n")
     return
 
+def del_pl_songs(pl, s_list, pl_list):
+    """
+    function for deleting songs in playlist
+    input: playlist position in pl_list, song list, playlist list (system), songs to delete (user)
+    output: changed playlist (system)
+    1. display songs in playlist
+    2. ask for a song to delete
+    3. ask for confirmation
+    4. remove song from playlist
+    5. ask if user wants to continue deleting songs, if so, return to 1
+    """
+    next = True
+    while next and len(pl_list[pl]) > 1:
+        s = choose_s(pl, s_list, pl_list, "Which song to delete [type the number]: ")
+        while True:
+            confirm = cl_strinput(f"Delete {s_list[pl_list[pl][s]][2]} from {pl_list[pl][0]} [Y/N]: ")
+            confirm = confirm.lower()
+            match confirm:
+                case 'y':
+                    pl_list[pl].pop(s)
+                    break
+                case 'n':
+                    break
+                case _:
+                    print("choose a valid option".upper())
+        while True:
+            cont = cl_strinput(f"Continue deleting songs? [Y/N]: ")
+            cont = cont.lower()
+            match cont:
+                case 'y':
+                    next = True
+                    break
+                case 'n':
+                    next = False
+                    break
+                case _:
+                    print("not a valid option".upper())
+    return
+
+def ed_pl_name(pl, pl_list):
+    """
+    function for editing playlist name
+    input: playlist, and playlist list (system), new name(user)
+    output: changed name in playlist list
+    1. display current name
+    2. ask for new name
+    3. confirm the user wants to change the name
+    4. change the name in playlist list
+    """
+    print(f"\nCurrent name: {pl_list[pl][0]}")
+    while True:
+        name = cl_strinput("Type a new name: ")
+        confirm = cl_strinput(f"Change playlist name from {pl_list[pl][0]} to {name} [Y]es/[N]o/[R]ename: ")
+        confirm.lower()
+        match confirm:
+            case 'y':
+                pl_list[pl][0] = name
+                break
+            case 'n':
+                break
+            case 'r':
+                continue
+            case _:
+                print("not a valid option")
+    return
+
+def del_pl(pl, pl_list):
+    """
+    function for deleting playlist from playlist list
+    input: playlist to delete, playlist list (system), confirmation (user)
+    output: deletion of playlist from playlist list
+    1. ask user for confirmation
+    2. if they really want to do it, delete playlist from playlist list
+    """
+    while True:
+        confirm = cl_strinput(f"Do you really want to delete {pl_list[pl][0]}. This action cannot be undone. [Y/N]: ")
+        confirm.lower()
+        match confirm:
+            case 'y':
+                pl_list.pop(pl)
+                break
+            case 'n':
+                break
+            case 'r':
+                continue
+            case _:
+                print("not a valid option")
+    return
+
+def edit_pl_menu(s_list, pl_list):
+    """
+    function for choosing which way to edit a playlist
+    input: song list, playlist list (system), action (user)
+    output: no output (unless an unvalid answer is given), this function calls other function
+    1. display functions
+    2. ask for action
+    3. call the corresponding function
+    """
+    print("\nPlaylist editing menu".upper())
+    pl = choose_pl(pl_list) - 1
+    print("\n1. Delete songs")
+    print("2. Add songs")
+    print("3. Change order")
+    print("4. Change name")
+    print("5. Delete playlist")
+    print("[e]. Return")
+    while True:
+        act = cl_strinput("Choose an option: ")
+        act = act.lower()
+        match act:
+            case '1':
+                if(len(pl_list[pl]) > 1):
+                    del_pl_songs(pl, s_list, pl_list)
+                else:
+                    print("not enough songs in playlist")
+                    input("press enter to continue".upper())
+                break
+            case '2':
+                if(len(s_list) > 0):
+                    add_song(pl_list[pl], s_list)
+                else:
+                    print("there are no songs to add")
+                    input("press enter to continue".upper())
+                break
+            case '3':
+                print("not available yet")
+                break
+            case '4':
+                ed_pl_name(pl, pl_list)
+                break
+            case '5':
+                del_pl(pl, pl_list)
+                break
+            case 'e':
+                break
+            case _:
+                print("not a valid option".upper())
+    return
+
+def del_songs(s_list, pl_list):
+    """
+    function for deleting songs from system memory
+    input: song list, playlist list (system), song to delete (user)
+    output: song deleted from song list and playlists, playlists are also modified to account for the new song list order
+    1. ask for song to delete
+    2. ask for confirmation
+    3. delete the song from song list
+    4. delete the song from playlists
+    5. shift positions stored in playlists to account for new song order
+    """
+    print_list = [["SONGS"]] # a simulated matrix is created so code can be reused. choose_s requires a playlist list, so a playlist list with only one lement is created
+    for i in range(len(s_list)):
+        print_list[0].append(i)
+    del_s = choose_s(0, s_list, print_list, "Which song to delete [this will also delete it from any playlists]: ")
+    del_s -= 1 # removes one to discard the position occupied by "SONGS"
+    while True:
+        confirm = cl_strinput("Are you sure? [Y/N]: ")
+        confirm = confirm.lower()
+        match confirm:
+            case 'y':
+                s_list.pop(del_s)
+                for i in range(len(pl_list)):
+                    try:
+                        while True:
+                            pl_list[i].remove(del_s) #removes instances of the deleted song one by one, produces an error when there are no more left
+                    except:
+                        for j in range(1, len(pl_list[i])): # accesses playlist, starts from 1 because 0 stores the name
+                            if(pl_list[i][j] > del_s):
+                                pl_list[i][j] -= 1 # to account for the removed position in the song list, since playlists only stores positions (current_pos > del_song_pos), song positions that were after the deleted song are moved back by one
+                break
+            case 'n':
+                break
+            case '_':
+                print("not a valid input")
+    return
+
+def edit_m_menu(s_list, pl_list):
+    """
+    function that serves as main (m) editing (edit) menu (menu), displays main options available
+    input: song list, playlist list (system), action (user)
+    output: no real output (unless an unvalid answer is given), function calls other functions
+    1. display options
+    2. ask for action
+    3. call corresponding function
+    """
+    print("\n1. Edit playlists")
+    print("2. Delete songs")
+    while True:
+        act = cl_strinput("Choose an option: ")
+        act = act.lower()
+        match act:
+            case '1':
+                if(len(pl_list) > 0): # if there are no playlists, why edit them
+                    edit_pl_menu(s_list, pl_list)
+                else:
+                    print("not enough playlists")
+                    input("press enter to continue".upper())
+                break
+            case '2':
+                if(len(s_list) > 0): # if there are no songs, why delete them
+                    del_songs(s_list, pl_list)
+                else:
+                    print("not enough songs")
+                    input("press enter to continue".upper())
+                break
+            case _:
+                print("not a valid option".upper())
+    return
+
 def main():
     songs, playlists = read_file()
     while True:
         act = action_menu()
         match act:
             case '1':
-                songs = register_menu(songs)
+                register_menu(songs)
             case '2':
-                playlists = pl_creation(playlists, songs)
+                if(len(songs) > 0): # if there are no songs, no songs can be added to playlists
+                    pl_creation(playlists, songs)
+                else:
+                    print("not enough songs to do that")
+                    input("press enter to continue".upper())
             case '3':
-                edit_pl_menu()
+                edit_m_menu(songs, playlists)
             case '4':
-                song, pl = playback_selection(playlists, songs)
-                pl_playback(song, pl, playlists, songs)
+                if(len(playlists) > 0): # if there are no playlists, no playlist can be played back
+                    try:
+                        song, pl = playback_selection(playlists, songs)
+                        pl_playback(song, pl, playlists, songs)
+                    except: # uses try and except, unlike other cases, because song and pl are being assigned values. There is another validation of song and playlist sizes inside playback_selection, and if an invalid answer is given, a None value is returned
+                        print("", end="") # that would cause the variable assignation to break, so this block avoids that
+                else:
+                    print("not enough playlists")
+                    input("press enter to continue".upper())
             case 'e':
                 break
             case _:
