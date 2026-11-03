@@ -6,7 +6,7 @@ Playlist manager
 AlMoOl
 
 The following program is a prototype that should be able of registering songs, creating playlists, and playing back playlists
-Currently, the program should work similarly to the final product, i. e., functions work with one another, but data storage is still local and editing playlists and registered songs is not an available option yet
+Currently, the program should work similarly to the final product, i. e., functions work with one another
 Data storage:
 Songs info is stored in a matrix, where one element is the song info. For each list of song info, the data is order in the following way:
 1. filepath
