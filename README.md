@@ -1,5 +1,9 @@
 # Multi-Platform-Music-Playlist-Management-Program
 
+!!!!!!!!!!!!!\
+**IMPORTANT**: I KNOW THERE IS A SPELLING MISTAKE IN THE LAST UPDATE DESCRIPTION, SHUT UP\
+!!!!!!!!!!!!
+
 Streaming platforms' promise has been to offer access to every single piece of media ever created. In the case of the music industry, that would be songs. However, as someone who enjoys listening to both video game music and indie remixes, the songs I like tend to be excluded from official streaming platforms. For example, I have the premium version of Apple Music, but if I were to want to listen to Mario Kart World's, a Nintendo game, soundtrack, I would have to go to either YouTube Music and listen to an unofficial upload that can be taken down at any time, or go to the Nintendo Music app to listen to the songs. Furthermore, songs not available in a streaming platform cannot be included in playlists made in that platform. As a result, I have to constantly be changing apps to be able to listen to my favorite songs.
 
 My project for this semester involves creating a program that can create, manage, and play playlists with songs from streaming services the user is subscribed to and songs they have already downloaded to their device by storing the file address or website, along with other relevant information such as title, artist, and release date. After a playlist has been created, it would allow the user to add and remove songs, change the song order manually or through a pre-programmed sort (alphabetical, by release date, by duration, etc.), and select songs to create a new playlist. It would also keep record of the most listened songs by the user for them to see and to create a Top 10 list.
@@ -8,7 +12,7 @@ My project for this semester involves creating a program that can create, manage
 **IMPORTANT**: run the program in vscode or other python interpreters that use windows, not thonny. msvcrt library works differently in thonny and will make the playback not work at all. also, i think the program wouldn't work on linux or macos due to the sys library using different parameters for functions, but i have not been able to check\
 !!!!!!!!!!!!
 
-File handling has just been added, as of nov 2nd, 2026. when first running the program, it will create a file "song_data.txt" to store data. for testing purposes, a dummy song list and playlist are included when launching the program for the first time. This can be deleted safely; also, info is only stored when terminating the program from the main menu (e), so don't close it beforehand.
+File handling has just been added, as of nov 2nd, 2026. when first running the program, it will create a file "song_data.txt" to store data. for testing purposes, a dummy song list and playlist are included when launching the program for the first time. These can be deleted safely; also, info is only stored when terminating the program from the main menu (e), so don't close it beforehand.
 I just wanted to add that, because of the amount of features, playtesting has become kind of hard. While i have tried to fix bugs to the best of my ability, some may have slipped my testing, so it would be very much appreciated if you could let me know of any you encounter.
 
 
