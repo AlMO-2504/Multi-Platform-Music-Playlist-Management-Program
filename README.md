@@ -7,9 +7,9 @@ My project for this semester involves creating a program that can create, manage
 !!!!!!!!!!!!!\
 **IMPORTANT**: run the program in vscode or other python interpreters that use windows, not thonny. msvcrt library works differently in thonny and will make the playback not work at all. also, i think the program wouldn't work on linux or macos due to the sys library using different parameters for functions, but i have not been able to check.
 Furthermore, the program now uses two external libraries, so from the command prompt program in windows, you must run:
-python -m pip install playsound3
-python -m pip install mutagen
-These libraries can also be installed directly from the vscode terminal.
+\python -m pip install playsound3
+\python -m pip install mutagen
+\These libraries can also be installed directly from the vscode terminal.
 \!!!!!!!!!!!!
 
 File handling has just been added, as of nov 2nd, 2026. when first running the program, it will create a file "song_data.txt" to store data. for testing purposes, a dummy song list and playlist are included when launching the program for the first time. These can be deleted safely; also, info is only stored when terminating the program from the main menu (e), so don't close it beforehand.
