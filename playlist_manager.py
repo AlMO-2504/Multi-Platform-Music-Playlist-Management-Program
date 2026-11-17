@@ -1,3 +1,7 @@
+from tkinter import filedialog as tk
+from mutagen.mp3 import MP3 as mp3
+from mutagen.easyid3 import EasyID3 as easyid3
+import playsound3 as ps
 import time
 import sys
 import msvcrt
@@ -56,7 +60,8 @@ def read_file():
                 continue
             if(store_songs == True):
                 song = d.split("|")
-                song[1] = int(song[1])
+                song[0] = repr(song[0])[1:-1]
+                song[1] = float(song[1])
                 song[3] = song[3][:-1] #removes \n from the last element
                 s_list.append(song)
             else:
@@ -192,6 +197,33 @@ def cl_strinput(msg):
     except:
         return msg
 
+def invalid_option(msg, invalid, pos_return):
+    """
+    function for printing error messages when an invalid option is sent
+    input: input message, error message, if cursor should return to exact position {not line} (system)
+    output: error message (user)
+    1. print errror message
+    2. check if exact position is needed
+    3. if so, go up two lines, move the length of the input message to the right, and delete extra characters
+    4. if not, go up two lines, clear the line so a new input message can be printed
+    """
+    print(invalid)
+    if(pos_return == True):
+        print(f"\r\033[2A\r\033[{len(msg)}C", end="")
+        print("\033[K", end="")
+    else:
+        print(f"\r\033[2A\033[K", end="")
+
+def not_invalid_option():
+    """
+    function for deleting error messages when a valid option is given
+    inputs: none
+    outputs: clear error message line (user)
+    1. since the cursor would be in the error line, if there is an error line, after receiving the input, only delete the current line and end with "" to avoid adding extra lines
+    """
+    print("\r\033[K", end="")
+    return
+
 # main menu display
 def action_menu():
     """
@@ -202,6 +234,7 @@ def action_menu():
     2. ask for input
     3. return input
     """
+    print("\n")
     print("main menu".upper())
     print("1. register song") # display menu actions
     print("2. create playlist")
@@ -229,8 +262,9 @@ def get_min_sec():
     5. if ':' was never encountered, print not a valid format
     6. if seconds >= 60, then print seconds can't be greater than 60
     """
+    msg = "duration [min:sec]: "
     while(True):
-        dur = cl_strinput("duration [min:sec]: ") # duration in 00:00
+        dur = cl_strinput(msg) # duration in 00:00
         min_sec = 'min' # working with minutes, currently
         valid = True
         min = 0
@@ -241,7 +275,7 @@ def get_min_sec():
                 min_sec = 'sec'
             else:
                 if(valid_input(char, int) == False): # checks if char is a digit
-                    print("type in format 00:00 using positive digits".upper())
+                    invalid_option(msg, "\033[Ktype in format 00:00 using positive digits".upper(), pos_return=False)
                     valid = False
                     break
                 d = int(char) # converts input to digit
@@ -253,15 +287,102 @@ def get_min_sec():
                         sec = sec * 10
                         sec += d
         if(sec >= 60):
-            print("seconds can't be greater than or equal to 60".upper())
+            invalid_option(msg, "\033[Kseconds can't be greater than or equal to 60".upper(), pos_return=False)
         elif(valid == False):
             continue # checks if a wrong answer was given, not a digit; avoids accidentally breaking the loop, valid is reset at the start of the loop
         elif(min_sec == 'min'):
-            print("please, give length in adequate format".upper())
+            invalid_option(msg, "\033[Kplease, give length in adequate format".upper(), pos_return=False)
         else:
+            not_invalid_option()
             break # if no errors were made by the user, the loop is broken
     dur = 60 * min + sec # transforms minutes to seconds and adds them to the remaining seconds
     return dur # returns the duration in seconds
+
+def manual_select(if_fp, if_length): # if filepath needed, if song length is needed
+    """
+    function to allow user to manually submit song info
+    inputs: if filepath is needed, if song lenght is needed (system), filepath, song length, title, artist (user)
+    output: manual song info (system)
+    1. if filepath and length are needed, ask for those, title and artist
+    2. if length is needded, ask for length, title, and artist
+    3. otherwise, ask only for title and artist
+    """
+    if(if_fp == True and if_length == True):
+        while True:
+            msg = "is the song stored in the computer? [Y]es/[N]o: "
+            in_unit = cl_strinput(msg)
+            match in_unit.lower():
+                case 'y':
+                    dir = cl_strinput("type out the mp3 filepath: ")
+                    break
+                case 'n':
+                    dir = ''
+                    break
+                case _:
+                    invalid_option(msg, "not a valid option", pos_return=False)
+        not_invalid_option()
+        title = cl_strinput("song title: ")
+        artist = cl_strinput("artist name: ")
+        length = get_min_sec()
+        return dir, length, title, artist
+    elif(if_length == True):
+        title = cl_strinput("song title: ")
+        artist = cl_strinput("artist name: ")
+        length = get_min_sec()
+        return length, title, artist
+    else:
+        title = cl_strinput("song title: ")
+        artist = cl_strinput("artist name: ")
+        return title, artist
+
+def song_select():
+    """
+    function for selecting songs directly from file explorer
+    inputs: filepath (user)
+    outputs: song info (system), success message (user)
+    1. with the tkinter library, open file explorer window where the user can choose only mp3 files
+    2. if a file with an mp3 file path is selected, use mutagen library to try and get the info directly from the metdata
+        a. if the operation is not successful, call manual select function, and ask for length, title and artist only, since a filepath has been provided
+    3. if no filepath is given, call manual select function and ask for all song info
+    4. return song info
+    """
+    print("choose a song from your files: ")
+    dir = tk.askopenfilename(title="choose a song from your files", filetypes=[("MP3 Audio Files", "*.mp3")])
+    if(dir):
+        try:
+            audio = mp3(dir)
+            info = easyid3(dir)
+            title = info.get("title")[0]
+            artist = info.get("artist")[0]
+            length = audio.info.length
+            print(f"Is this info correct?\nTitle: {title}\nArtist: {artist}")
+            msg = "[Y]es/[N]o: "
+            while True:
+                correct = cl_strinput(msg)
+                if(correct.lower() == 'y'):
+                    break
+                elif(correct.lower() == 'n'):
+                    title, artist = manual_select(if_fp=False, if_length=False)
+                    break
+                else:
+                    invalid_option(msg, "not a valid option", pos_return=False)
+        except:
+            print("data could not be extracted")
+            length, title, artist = manual_select(if_fp=False, if_length=True)
+    else:
+        dir, length, title, artist = manual_select(if_fp=True, if_length=True)
+    return [dir, length, title, artist]
+
+def confirm_info(info):
+    """
+    function for printing the message to validate song info
+    inputs: song info (system)
+    output: song info to validate (user)
+    """
+    print("\n")
+    print("confirm info".upper())
+    print(f"Title: {info[2]}\nArtist: {info[3]}\nLength: {int(info[1]//60)}:{int(info[1]%60)}\nFilepath: {info[0]}")
+    return
 
 def register_menu(s_list):
     """
@@ -276,14 +397,30 @@ def register_menu(s_list):
     5. print success message
     """
     print("\nsong registration".upper())
-    title = cl_strinput("song title: ")
-    artist = cl_strinput("artist name: ")
-    duration = get_min_sec()
-    directory = ''
-    song = [directory, duration, title, artist]
-    s_list.append(song)
-    print(f"Registering song: {title} by {artist}")
-    return
+    song_reg = False
+    msg = "Do you want to store the song using this info? [Y]es/[N]o, change info/[E]xit: "
+    while True:
+        if(song_reg == False):
+            song = song_select()
+            confirm_info(song)
+        confirm = cl_strinput(msg)
+        match confirm:
+            case 'y':
+                s_list.append(song)
+                not_invalid_option()
+                print(f"{song[2]} by {song[3]} has been registered")
+                return
+            case 'n':
+                song_reg = False
+                not_invalid_option()
+                print("Song registration will start over")
+                input("press enter to continue\n".upper())
+            case 'e':
+                not_invalid_option()
+                return
+            case _:
+                song_reg = True
+                invalid_option(msg, "not a valid option", pos_return=False)
 
 #Playlist creation
 def disp_avlbl_songs(song_matrix, pl):
@@ -334,28 +471,32 @@ def add_song(pl, s_list): # requires a playlist in list form, not position form
     value_error = False
     range_error = False
     c_error = False
+    msg = f"type the number of the song to add to {pl[0]}: "
+    msg_c = "\033[KWould you like to add another song [Y/N]? "
     while (cont == True):
+        if(song_added == False):
+           disp_avlbl_songs(s_list, pl)
         while (song_added == False):
-            disp_avlbl_songs(s_list, pl)
             if(value_error == True):
-                print("please, type a number".upper())
+                invalid_option(msg, "\033[Kplease, type a number".upper(), pos_return=False)
                 value_error = False
             elif(range_error == True):
-                print("please, choose one number from the given list".upper())
+                invalid_option(msg, "\033[Kplease, choose one number from the given list".upper(), pos_return=False)
                 range_error =  False
-            s = cl_strinput(f"type the number of the song to add to {pl[0]}: ") # 0 stores pl name
+            s = cl_strinput(msg)
             if(valid_input(s, int) == True):
                 s = int(s)
                 range_error = not valid_range(s, 1, len(s_list), '[]') # valid_range return False if there has been an error and true otherwise, inverting the valuable helps readability
                 if(range_error == False):
+                    not_invalid_option()
                     pl.append(s-1) # s is given in natural numbers, positions start at 0
                     song_added = True
             else:
                 value_error = True
         if(c_error == True):
-            print("Type either Y or N".upper())
+            invalid_option(msg_c, "\033[KType either Y or N".upper(), pos_return=False)
             c_error = False
-        c = cl_strinput("Would you like to add another song [Y/N]? ") # continue value
+        c = cl_strinput(msg_c) # continue value
         match c.upper():
             case 'Y':
                 cont = True
@@ -364,6 +505,7 @@ def add_song(pl, s_list): # requires a playlist in list form, not position form
                 cont = False
             case _:
                 c_error = True
+    not_invalid_option()
 
 def pl_creation(pl_list, s_list):
     """
@@ -426,16 +568,18 @@ def choose_pl(pl_list):
     if(len(pl_list) == 0):
         return None
     while True:
-        pl = cl_strinput("Which playlist: ")
+        msg = "Which playlist: "
+        pl = cl_strinput(msg)
         v_inp = valid_input(pl, int)
         if(v_inp == False):
-            print("type the number of the playlist".upper())
+            invalid_option(msg, "\033[Ktype the number of the playlist".upper(), pos_return=False)
         else:
             pl = int(pl)
             v_range = valid_range(pl, 1, len(pl_list), '[]')
             if(v_range == False):
-                print("select a number from the given list".upper())
+                invalid_option(msg, "\033[Kselect a number from the given list".upper(), pos_return=False)
             else:
+                not_invalid_option()
                 return pl
 
 def choose_s(pl, s_list, pl_list, msg):
@@ -453,13 +597,14 @@ def choose_s(pl, s_list, pl_list, msg):
         song = cl_strinput(msg)
         v_inp = valid_input(song, int)
         if(v_inp == False):
-            print("type the number of the song".upper())
+            invalid_option(msg, "\033[Ktype the number of the song".upper(), pos_return=False)
         else:
             song = int(song)
             v_range = valid_range(song, 1, len(pl_list[pl]), '[)')
             if(v_range == False):
-                print("select a number from the given list".upper())
+                invalid_option(msg, "\033[Kselect a number from the given list".upper(), pos_return=False)
             else:
+                not_invalid_option()
                 return song
             
 def playback_selection(pl_list, s_list):
@@ -503,8 +648,8 @@ def playback(s_length):
     7. if yes, return what option the user has chosen
     8. if not, continue
     """
-    speed = 10 # how fast the songs are going, 10 = 10x speed
-    p = 2 # how (p)recise the updating should be, it expresses a power of 10^-p, for example, 2 means every 0.01 the percentage will update, but also the time precision of calculations. A lower p means greater precision and more updates per second
+    speed = 1 # how fast the songs are going, 10 = 10x speed
+    p = 3 # how (p)recise the updating should be, it expresses a power of 10^-p, for example, 2 means every 0.01 the percentage will update, but also the time precision of calculations. A lower p means greater precision and more updates per second
     start_time = round(time.monotonic(), p) * speed # time.monotonic gives back time in seconds; it is then rounded to the established precision and multiplied by the speed
     past_time = round(time.monotonic(), p) * speed - start_time # the last time recorded, it is relative to start_time so it start at 0 from start time
     error_time_s = 0 # start time for error message (invalid input), after time, the message disappears
@@ -611,7 +756,7 @@ def pl_playback(start_s, pl, pl_list, s_list):
         print("")
     while (option != 'E'):
         sys.stdout.write("\r\033[K\033[A\r\033[K\033[A\r\033[K\033[A\r\033[K\033[A\r\033[K") # clears the past 5 lines
-        sys.stdout.flush() # applies changesz if they had not been applied yet
+        sys.stdout.flush() # applies changes if they had not been applied yet
         if(i > len(pl) - 1): # checks if i is bigger than list length to avoid range errors
             i = 1 # return i to the first song position
         elif(i < 1): # if i is lower than 1, which is the lowest position that stores songs, it moves it back up to the end of the list
@@ -625,11 +770,19 @@ def pl_playback(start_s, pl, pl_list, s_list):
         sec = s_list[pl[i]][1] # looks for duration of current song
         title2 = s_list[pl[j]][2] # looks for title of next song
         artist2 = s_list[pl[j]][3] # looks for artist of next song
-        min = sec//60 # calculates minutes from the seconds
-        sec = sec - min * 60 # calculates the remaining seconds 
+        min = int(sec//60) # calculates minutes from the seconds
+        sec = int(sec - min * 60) # calculates the remaining seconds 
         print(f"NOW PLAYING {title} BY {artist} - {min}:{sec}") # prints info of current song
         print(f"Next, {title2} by {artist2}") # prints info of next song
-        option = playback(s_list[pl[i]][1]) #saves the return value of playback()
+        try: # check if address stores songs
+            file = open(s_list[pl[i]][0], 'r')
+            song = ps.playsound(s_list[pl[i]][0], block=False) # using playsound (ps) library, create playback object
+            if(song.is_alive()): # if song has started platying, start playback function
+                option = playback(s_list[pl[i]][1]) #saves the return value of playback()
+            song.stop() # after the playback function has ended, stop playing object
+            file.close()
+        except:
+            option = playback(s_list[pl[i]][1]) #saves the return value of playback()
         match option:
             case 'N': # moves to the next song by adding 1 to the count variables
                 i += 1
@@ -654,8 +807,10 @@ def del_pl_songs(pl, s_list, pl_list):
     next = True
     while next and len(pl_list[pl]) > 1:
         s = choose_s(pl, s_list, pl_list, "Which song to delete [type the number]: ")
+        msg_c = f"Delete {s_list[pl_list[pl][s]][2]} from {pl_list[pl][0]} [Y/N]: "
+        msg_cont = "Continue deleting songs? [Y/N]: "
         while True:
-            confirm = cl_strinput(f"Delete {s_list[pl_list[pl][s]][2]} from {pl_list[pl][0]} [Y/N]: ")
+            confirm = cl_strinput(msg_c)
             confirm = confirm.lower()
             match confirm:
                 case 'y':
@@ -664,9 +819,10 @@ def del_pl_songs(pl, s_list, pl_list):
                 case 'n':
                     break
                 case _:
-                    print("choose a valid option".upper())
+                    invalid_option(msg_c, "choose a valid option".upper(), pos_return=False)
+        not_invalid_option()
         while True:
-            cont = cl_strinput(f"Continue deleting songs? [Y/N]: ")
+            cont = cl_strinput(msg_cont)
             cont = cont.lower()
             match cont:
                 case 'y':
@@ -676,7 +832,8 @@ def del_pl_songs(pl, s_list, pl_list):
                     next = False
                     break
                 case _:
-                    print("not a valid option".upper())
+                    invalid_option(msg_c, "choose a valid option".upper(), pos_return=False)
+        not_invalid_option()
     return
 
 def ed_pl_name(pl, pl_list):
@@ -701,9 +858,11 @@ def ed_pl_name(pl, pl_list):
             case 'n':
                 break
             case 'r':
+                not_invalid_option()
                 continue
             case _:
-                print("not a valid option")
+                invalid_option(f"Change playlist name from {pl_list[pl][0]} to {name} [Y]es/[N]o/[R]ename: ", "not a valid option".upper(), pos_return=False)
+    not_invalid_option()
     return
 
 def del_pl(pl, pl_list):
@@ -723,10 +882,9 @@ def del_pl(pl, pl_list):
                 break
             case 'n':
                 break
-            case 'r':
-                continue
             case _:
-                print("not a valid option")
+                invalid_option(f"Do you really want to delete {pl_list[pl][0]}. This action cannot be undone. [Y/N]: ", "not a valid option".upper(), pos_return=False)
+    not_invalid_option()
     return
 
 def edit_pl_menu(s_list, pl_list):
@@ -746,8 +904,9 @@ def edit_pl_menu(s_list, pl_list):
     print("4. Change name")
     print("5. Delete playlist")
     print("[e]. Return")
+    msg = "Choose an option: "
     while True:
-        act = cl_strinput("Choose an option: ")
+        act = cl_strinput(msg)
         act = act.lower()
         match act:
             case '1':
@@ -776,7 +935,8 @@ def edit_pl_menu(s_list, pl_list):
             case 'e':
                 break
             case _:
-                print("not a valid option".upper())
+                invalid_option(msg, "not a valid option".upper(), pos_return=False)
+    not_invalid_option()
     return
 
 def del_songs(s_list, pl_list):
@@ -795,8 +955,9 @@ def del_songs(s_list, pl_list):
         print_list[0].append(i)
     del_s = choose_s(0, s_list, print_list, "Which song to delete [this will also delete it from any playlists]: ")
     del_s -= 1 # removes one to discard the position occupied by "SONGS"
+    msg = "\033[KAre you sure? [Y/N]: "
     while True:
-        confirm = cl_strinput("Are you sure? [Y/N]: ")
+        confirm = cl_strinput(msg)
         confirm = confirm.lower()
         match confirm:
             case 'y':
@@ -812,8 +973,9 @@ def del_songs(s_list, pl_list):
                 break
             case 'n':
                 break
-            case '_':
-                print("not a valid input")
+            case _:
+                invalid_option(msg, "not a valid input", pos_return=False)
+    not_invalid_option()
     return
 
 def edit_m_menu(s_list, pl_list):
@@ -827,11 +989,13 @@ def edit_m_menu(s_list, pl_list):
     """
     print("\n1. Edit playlists")
     print("2. Delete songs")
+    msg = "Choose an option: "
     while True:
-        act = cl_strinput("Choose an option: ")
+        act = cl_strinput(msg)
         act = act.lower()
         match act:
             case '1':
+                not_invalid_option()
                 if(len(pl_list) > 0): # if there are no playlists, why edit them
                     edit_pl_menu(s_list, pl_list)
                 else:
@@ -839,6 +1003,7 @@ def edit_m_menu(s_list, pl_list):
                     input("press enter to continue".upper())
                 break
             case '2':
+                not_invalid_option()
                 if(len(s_list) > 0): # if there are no songs, why delete them
                     del_songs(s_list, pl_list)
                 else:
@@ -846,7 +1011,7 @@ def edit_m_menu(s_list, pl_list):
                     input("press enter to continue".upper())
                 break
             case _:
-                print("not a valid option".upper())
+                invalid_option(msg, "not a valid option".upper(), pos_return=False)
     return
 
 def main():
@@ -877,7 +1042,8 @@ def main():
             case 'e':
                 break
             case _:
-                print("not an option\n".upper())
+                print("not a valid option")
+                input("press enter to continue".upper())
         print("\n", end="")
     write_file(songs, playlists)
     return
