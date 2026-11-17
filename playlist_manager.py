@@ -60,7 +60,7 @@ def read_file():
                 continue
             if(store_songs == True):
                 song = d.split("|")
-                song[0] = repr(song[0])[1:-1]
+                song[0] = repr(song[0])[1:-1] # turns plain string to raw string to allow for storage of filepaths
                 song[1] = float(song[1])
                 song[3] = song[3][:-1] #removes \n from the last element
                 s_list.append(song)
