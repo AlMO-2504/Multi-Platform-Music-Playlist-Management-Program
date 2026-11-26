@@ -4,76 +4,19 @@ Streaming platforms' promise has been to offer access to every single piece of m
 
 My project for this semester involves creating a program that can create, manage, and play playlists with songs from streaming services the user is subscribed to and songs they have already downloaded to their device by storing the file address or website, along with other relevant information such as title, artist, and release date. After a playlist has been created, it would allow the user to add and remove songs, change the song order manually or through a pre-programmed sort (alphabetical, by release date, by duration, etc.), and select songs to create a new playlist. It would also keep record of the most listened songs by the user for them to see and to create a Top 10 list.
 
-!!!!!!!!!!!!!\
-**IMPORTANT**: run the program in vscode or other python interpreters that use windows, not thonny. msvcrt library works differently in thonny and will make the playback not work at all. also, i think the program wouldn't work on linux or macos due to the sys library using different parameters for functions, but i have not been able to check.
-Furthermore, the program now uses two external libraries, so from the command prompt program in windows, you must run:\
+**Installation instructions**\
+Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:\
 python -m pip install playsound3\
 python -m pip install mutagen\
-These libraries can also be installed directly from the vscode terminal.\
-!!!!!!!!!!!!
 
-File handling has just been added, as of nov 2nd, 2026. when first running the program, it will create a file "song_data.txt" to store data. for testing purposes, a dummy song list and playlist are included when launching the program for the first time. These can be deleted safely; also, info is only stored when terminating the program from the main menu (e), so don't close it beforehand.
-I just wanted to add that, because of the amount of features, playtesting has become kind of hard. While i have tried to fix bugs to the best of my ability, some may have slipped my testing, so it would be very much appreciated if you could let me know of any you encounter.
+**Running the Program**\
+The .py file can be run from any python interpreter that uses Windows, including VsCode and Windows powershell. Linux and MacOs is not guaranteed due to the sys library using different parameters for functions. Furthermore, Thonny is not supported.\
+To run the program, open your selected terminal and change directory (cd) to the folder that stores the playlist_manager.py file. The following command is merely illustrative:\
+cd C:\Users\user\Desktop\python\pl_mngr\
+Once there, simply type:\
+py playlist_manager.py\
+This should start the program.\
 
-
-
-__Inputs:__ user instruction (creating playlist, registering song, etc.); song location, title, release date, and artist; songs to delete or to add; new song order.\
-__Outputs:__ new or altered playlist; song registration.
-
-__Algorithm:__
-1. Ask for what the user wants to do: a) register song, b) create playlist, c) edit playlist, d) playback playlists.
-
-&emsp;1.a) For registering a song:\
-&emsp;&emsp;1.a.1. ask for title, artist, release date, and location.\
-&emsp;&emsp;1.a.2. add new entry to file that stores every other song and store the information\
-&emsp;&emsp;1.a.3. display "Song successfully registered"
-
-&emsp;&emsp;1.b) For creating a playlist:\
-&emsp;&emsp;&emsp;1.b.1. ask for playlist name\
-&emsp;&emsp;&emsp;1.b.2. display registered songs\
-&emsp;&emsp;&emsp;1.b.3. ask user to choose which songs to include\
-&emsp;&emsp;&emsp;1.b.4. store playlist name and song list\
-&emsp;&emsp;&emsp;1.b.5. display "Playlist succesfully registered"
-  
-&emsp;&emsp;1.c) For editing a playlist:\
-&emsp;&emsp;&emsp;1.c.1. ask if the user wants to: a) add song, b) delete song, c) edit song order, d) delete playlist\
-&emsp;&emsp;&emsp;&emsp;1.c.1.a) For adding a song:\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.1. display registered songs\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.2. ask user which songs to add\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.3. add songs to the end of the playlist data file\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.a.4. display "Succesfully added songs"\
-&emsp;&emsp;&emsp;&emsp;1.c.1.b) For deleting a song:\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.1. display registered songs\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.2. ask user which songs to delete\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.3. look for songs in the playlist data file\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.3. remove songs from the playlist data file\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.b.4. display "Succesfully deleted songs"\
-&emsp;&emsp;&emsp;&emsp;1.c.1.c) For editing song order:\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1. ask user if they want to change it a) manually or through a b) pre-programmed sort\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a) For manual changes:\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.1. display songs in the playlist\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.2. ask user to choose a song\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.3. ask user to choose a different song to change positions with\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.4. change positions in playlist data file and save\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.a.5. ask user if he wants to continue: if yes, return to step 1.c.1.c.1., else, continue\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b) For pre-programmed sorts:\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.1. display pre-programmed sorts\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.2. ask user to choose sort\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.3. apply sort\
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.c.1.b.4. save changes in playlist data file\
-&emsp;&emsp;&emsp;&emsp;1.c.1.d) For deleting a playlist:\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.1. ask user for confirmation\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.c.1.d.2. delete entry from playlist data file
-
-&emsp;&emsp;1.d) For playing back playlists\
-&emsp;&emsp;&emsp;1.d.1. ask user for song where to start\
-&emsp;&emsp;&emsp;1.d.2. ask user if they want a) a random order, b) or not\
-&emsp;&emsp;&emsp;&emsp;1.d.2.a) For a random order\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.d.2.a.1. generate a list with numbers from 1 to the number of songs in playlists\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.d.2.a.2. follow that order for that playback\
-&emsp;&emsp;&emsp;&emsp;1.d.2.b) For a not random order\
-&emsp;&emsp;&emsp;&emsp;&emsp;1.d.2.a.1. follow the order in the list\
-&emsp;&emsp;&emsp;1.d.3. add 1 to the number of times the song has been played
-
-2. go back to step 1
-The program itself is a loop and for every action described before there will be a corresponding function as to avoid code repetition.
+**Important***
+The program uses a .txt file called 'song_data.txt' to store both song info an playlist order. If the file were to be deleted, there is no backup to restore the information.\
+When first launching the program, 'song_data.txt' will include a dummy song list and playlist for testing purposes. These can be deleted at any time. Finally, changes are only saved when terminating the program from the main menu (e), so don't close it beforehand.
