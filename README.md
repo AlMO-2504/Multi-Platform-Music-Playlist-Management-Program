@@ -7,7 +7,7 @@ My project for this semester involves creating a program that can create, manage
 **Installation instructions**\
 Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:\
 python -m pip install playsound3\
-python -m pip install mutagen\
+python -m pip install mutagen
 
 **Running the Program**\
 The .py file can be run from any python interpreter that uses Windows, including VsCode and Windows powershell. Linux and MacOs is not guaranteed due to the sys library using different parameters for functions. Furthermore, Thonny is not supported.\
@@ -15,8 +15,8 @@ To run the program, open your selected terminal and change directory (cd) to the
 cd C:\Users\user\Desktop\python\pl_mngr\
 Once there, simply type:\
 py playlist_manager.py\
-This should start the program.\
+This should start the program.
 
-**Important***
+**Important**
 The program uses a .txt file called 'song_data.txt' to store both song info an playlist order. If the file were to be deleted, there is no backup to restore the information.\
 When first launching the program, 'song_data.txt' will include a dummy song list and playlist for testing purposes. These can be deleted at any time. Finally, changes are only saved when terminating the program from the main menu (e), so don't close it beforehand.
