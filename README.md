@@ -17,6 +17,14 @@ Once there, simply type:\
 py playlist_manager.py\
 This should start the program.
 
-**Important**
+**Important**\
 The program uses a .txt file called 'song_data.txt' to store both song info an playlist order. If the file were to be deleted, there is no backup to restore the information.\
 When first launching the program, 'song_data.txt' will include a dummy song list and playlist for testing purposes. These can be deleted at any time. Finally, changes are only saved when terminating the program from the main menu (e), so don't close it beforehand.
+
+**Used libraries**
+playsound3 includes the playsound function, which is used to play music in the background without interrupting other processes.https://pypi.org/project/playsound3 \
+mutagen uses the submodules mutagen.mp3 and mutagen.easyid3 to extract metadata from mp3 files, simplifying the process of collecting song info.https://mutagen.readthedocs.io/en/latest/api/index.html \
+tkinter includes the filedialog module that opens a window for file selection, simplifying the process of choosing a song stored on the computer. https://docs.python.org/3/library/dialog.html#module-tkinter.filedialog \
+sys includes the stdout.write function, which is used for constantly changing the content of the terminal without printing new lines. https://docs.python.org/3/library/sys.html#sys.stdout \
+msvcrt includes the kbhit function, which constantly checks for new user inputs without stopping the program, and the getche function, which allows for the reading of the input. This was necessary for the implementation of the playback function. https://docs.python.org/3/library/msvcrt.html \
+Finally, the time library (with time.monotonic) is used to keep a timer and, therefore, know when to stop playing back a song. https://docs.python.org/3/library/time.html#time.monotonic
