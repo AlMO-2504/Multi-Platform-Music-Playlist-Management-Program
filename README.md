@@ -13,9 +13,9 @@ python -m pip install mutagen
 The .py file can be run from any python interpreter that uses Windows, including VsCode and Windows powershell. Linux and MacOs is not guaranteed due to the sys library using different parameters for functions. Furthermore, Thonny is not supported.\
 To run the program, open your selected terminal and change directory (cd) to the folder that stores the playlist_manager.py file. The following command is merely illustrative:\
 cd C:\Users\user\Desktop\python\pl_mngr\
-To get the filepath, you can right click on the folder where the file is located and select Copy as File Path. Then, paste, Ctrl+V, the file path on the terminal. Once there, if you use the winows operating system, simply type:\
+To get the filepath, you can right click on the folder where the file is located and select Copy as File Path. Then, paste, Ctrl+V, the file path on the terminal and press Enter. Once there, if you use the winows operating system, simply type:\
 py playlist_manager.py\
-This should start the program.
+And press Enter. This should start the program.
 
 **Important**\
 The program uses a .txt file called 'song_data.txt' to store both song info an playlist order. If the file were to be deleted, there is no backup to restore the information.\
