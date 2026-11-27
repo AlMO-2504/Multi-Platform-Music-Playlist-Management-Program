@@ -24,7 +24,7 @@ The .py file can be run from any python interpreter that uses Windows, including
 To run the program, open your selected terminal and change directory (cd) to the folder that stores the playlist_manager.py file. The following command is merely illustrative:
 > cd C:\Users\user\Desktop\python\pl_mngr
 
-To get the filepath, you can right click on the folder where the file is located and select Copy as File Path. Then, paste, Ctrl+V, the file path on the terminal and press Enter. Once there, if you use the winows operating system, simply type:
+To get the filepath, you can right click on the folder where the file is located and select Copy as File Path. Then, paste, Ctrl+V, the file path on the terminal and press Enter. Once there, if you use the Windows operating system, simply type:
 > py playlist_manager.py
 
 And press Enter. This should start the program.
