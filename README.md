@@ -2,7 +2,16 @@
 
 Streaming platforms' promise has been to offer access to every single piece of media ever created. In the case of the music industry, that would be songs. However, as someone who enjoys listening to both video game music and indie remixes, the songs I like tend to be excluded from official streaming platforms. For example, I have the premium version of Apple Music, but if I were to want to listen to Mario Kart World's, a Nintendo game, soundtrack, I would have to go to either YouTube Music and listen to an unofficial upload that can be taken down at any time, or go to the Nintendo Music app to listen to the songs. Furthermore, songs not available in a streaming platform cannot be included in playlists made in that platform. As a result, I have to constantly be changing apps to be able to listen to my favorite songs.
 
-My project for this semester involves creating a program that can create, manage, and play playlists with songs from streaming services the user is subscribed to and songs they have already downloaded to their device by storing the file address or website, along with other relevant information such as title, artist, and release date. After a playlist has been created, it would allow the user to add and remove songs, change the song order manually or through a pre-programmed sort (alphabetical, by release date, by duration, etc.), and select songs to create a new playlist. It would also keep record of the most listened songs by the user for them to see and to create a Top 10 list.
+This is a program designed to allow for the creation of playlists and registration of songs, which currently supports direct web links (urls that point to an mp3) and mp3 files stored on the computer. When running the program, a main menu will pop up showing the options of registering a song, creating a playlist, editing data, and playing back playlists:
+Registering songs: you have the option of getting the metadata from a file or typing out the information yourself. Once the info has been confirmed, the song is available for use in the rest of the program.
+Creating playlists: the function asks for a name and which of the registered songs are to be included in the playlist. Only one song can be added at a time. Once finished, the playlist is saved and is available for use in the rest of the program.
+Editing data: both songs and playlists can be edited. For songs, you can delete registered songs, which will also delete them from any playlists they are included in. For playlists, the following options are available:
+Changing the playlist name.
+Adding and removing songs from the playlist.
+Deleting the playlist.
+Play back: After selecting a playlist and which song to start from, playback starts. You can choose to skip, go back, and exit in real time. Once a song finishes playing, the next one in the playlist starts. Playlists loop by themselves.
+	For interacting with the program, basic prompts are given to ask for the information or input needed. The expected answers or commands are usually provided as well, usually in brackets when presented with a multiple choice question. Furthermore, if a “wrong” answer is given, an error message usually appears.
+
 
 **Installation instructions**\
 Download the .py file and save it in a location you can access. Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:\
