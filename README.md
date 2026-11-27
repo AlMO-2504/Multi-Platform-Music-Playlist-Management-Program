@@ -15,7 +15,7 @@ For interacting with the program, basic prompts are given to ask for the informa
 
 
 # Installation
-Download the .py file and save it in a location you can access. Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:\
+Download the .py file and save it in a location you can access. Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:
 > python -m pip install playsound3\
 > python -m pip install mutagen
 
