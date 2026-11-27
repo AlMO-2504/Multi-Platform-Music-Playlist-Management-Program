@@ -19,7 +19,7 @@ Download the .py file and save it in a location you can access. Ensure your syst
 > python -m pip install playsound3\
 > python -m pip install mutagen
 
-## Running the Program
+## Running the program
 The .py file can be run from any python interpreter that uses Windows, including VsCode and Windows powershell. Linux and MacOs is not guaranteed due to the sys library using different parameters for functions. Furthermore, Thonny is not supported.\
 To run the program, open your selected terminal and change directory (cd) to the folder that stores the playlist_manager.py file. The following command is merely illustrative:\
 cd C:\Users\user\Desktop\python\pl_mngr\
