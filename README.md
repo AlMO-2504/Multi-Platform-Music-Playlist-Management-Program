@@ -14,12 +14,12 @@ This is a program designed to allow for the creation of playlists and registrati
 For interacting with the program, basic prompts are given to ask for the information or input needed. The expected answers or commands are usually provided as well, usually in brackets when presented with a multiple choice question. Furthermore, if a “wrong” answer is given, an error message usually appears.
 
 
-# Installation
+## Installation
 Download the .py file and save it in a location you can access. Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:
 > python -m pip install playsound3\
 > python -m pip install mutagen
 
-# Running the Program
+## Running the Program
 The .py file can be run from any python interpreter that uses Windows, including VsCode and Windows powershell. Linux and MacOs is not guaranteed due to the sys library using different parameters for functions. Furthermore, Thonny is not supported.\
 To run the program, open your selected terminal and change directory (cd) to the folder that stores the playlist_manager.py file. The following command is merely illustrative:\
 cd C:\Users\user\Desktop\python\pl_mngr\
@@ -31,7 +31,7 @@ And press Enter. This should start the program.
 The program uses a .txt file called 'song_data.txt' to store both song info an playlist order. If the file were to be deleted, there is no backup to restore the information.\
 When first launching the program, 'song_data.txt' will include a dummy song list and playlist for testing purposes. These can be deleted at any time. Finally, changes are only saved when terminating the program from the main menu (e), so don't close it beforehand.
 
-# Used libraries
+## Used libraries
 playsound3 includes the playsound function, which is used to play music in the background without interrupting other processes.https://pypi.org/project/playsound3 \
 mutagen uses the submodules mutagen.mp3 and mutagen.easyid3 to extract metadata from mp3 files, simplifying the process of collecting song info.https://mutagen.readthedocs.io/en/latest/api/index.html \
 tkinter includes the filedialog module that opens a window for file selection, simplifying the process of choosing a song stored on the computer. https://docs.python.org/3/library/dialog.html#module-tkinter.filedialog \
