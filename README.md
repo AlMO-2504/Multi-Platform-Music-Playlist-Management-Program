@@ -5,12 +5,11 @@ Streaming platforms' promise has been to offer access to every single piece of m
 This is a program designed to allow for the creation of playlists and registration of songs, which currently supports direct web links (urls that point to an mp3) and mp3 files stored on the computer. When running the program, a main menu will pop up showing the options of registering a song, creating a playlist, editing data, and playing back playlists:\
 - Registering songs: you have the option of getting the metadata from a file or typing out the information yourself. Once the info has been confirmed, the song is available for use in the rest of the program.
 - Creating playlists: the function asks for a name and which of the registered songs are to be included in the playlist. Only one song can be added at a time. Once finished, the playlist is saved and is available for use in the rest of the program.
-- Editing data: both songs and playlists can be edited. For songs, you can delete registered songs, which will also delete them from any playlists they are included in.\
-For playlists, the following options are available:
-- Changing the playlist name.
-- Adding and removing songs from the playlist.
-- Deleting the playlist.
-- Play back: After selecting a playlist and which song to start from, playback starts. You can choose to skip, go back, and exit in real time. Once a song finishes playing, the next one in the playlist starts. Playlists loop by themselves.\
+- Editing data: both songs and playlists can be edited. For songs, you can delete registered songs, which will also delete them from any playlists they are included in. For playlists, the following options are available:
+ - Changing the playlist name.
+ - Adding and removing songs from the playlist.
+ - Deleting the playlist.
+ - Play back: After selecting a playlist and which song to start from, playback starts. You can choose to skip, go back, and exit in real time. Once a song finishes playing, the next one in the playlist starts. Playlists loop by themselves.\
 For interacting with the program, basic prompts are given to ask for the information or input needed. The expected answers or commands are usually provided as well, usually in brackets when presented with a multiple choice question. Furthermore, if a “wrong” answer is given, an error message usually appears.
 
 
