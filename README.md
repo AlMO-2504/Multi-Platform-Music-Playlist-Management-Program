@@ -10,6 +10,7 @@ This is a program designed to allow for the creation of playlists and registrati
   - Adding and removing songs from the playlist.
   - Deleting the playlist.
   - Play back: After selecting a playlist and which song to start from, playback starts. You can choose to skip, go back, and exit in real time. Once a song finishes playing, the next one in the playlist starts. Playlists loop by themselves.\
+
 For interacting with the program, basic prompts are given to ask for the information or input needed. The expected answers or commands are usually provided as well, usually in brackets when presented with a multiple choice question. Furthermore, if a “wrong” answer is given, an error message usually appears.
 
 
