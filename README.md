@@ -14,7 +14,7 @@ This is a program designed to allow for the creation of playlists and registrati
 For interacting with the program, basic prompts are given to ask for the information or input needed. The expected answers or commands are usually provided as well, usually in brackets when presented with a multiple choice question. Furthermore, if a “wrong” answer is given, an error message usually appears.
 
 
-# Installation instructions\
+# Installation
 Download the .py file and save it in a location you can access. Ensure your system has the playsound3 and mutagen libraries. If you are not sure they are already installed, on the windows terminal run the following commands:\
 python -m pip install playsound3\
 python -m pip install mutagen
